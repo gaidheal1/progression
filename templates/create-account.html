@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'menu.js') }}"></script>
+  </head>
+  <body>
+    <h1>Progression</h1>
+      <form action="/create-account" method="POST">
+        <h3>Creating account</h3>
+        <p>Here, you will enter details about your real self outside of the game world.</p>
+        <p><label for="email">Email address:</label>
+        <input type="email" id="email" name="email" required></p>
+        {% if email == True %}
+          <p> Email address already used </p>
+        {% endif %}
+        <p><label for="username">Username:</label>
+        <input type="text" id="username" name="username" required></p>
+        {% if username == True %}
+          <p> Username already used </p>
+        {% endif %}
+        <p>Password: <input type="password" id="password" name="password" required></p>
+        <p><input type="submit" value="Create account"></p>
+      </form>
+  </body>
+</html>

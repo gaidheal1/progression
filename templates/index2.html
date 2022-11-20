@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'menu.js') }}"></script>
+  </head>
+  <body>
+    <h1>Progression</h1>
+    {% if user == None %}
+      <p> <button type="button" name="createAccount"><a href="/create-account">Create new account</a></button></p>
+      <p> <button type="button" name="button"><a href="/login">Login</a></button></p>
+    {% else %}
+      <p>Welcome, {{ user }}!</p>
+      <p><button type="button" name="home"><a href="/home">Enter game</a></button></p>
+      <br><br>
+      <p><button type="button" name="logout"><a href="/logout">Log out</a></button></p>
+    {% endif %}
+  </body>
+</html>

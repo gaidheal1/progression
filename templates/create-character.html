@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'menu.js') }}"></script>
+  </head>
+  <body>
+    <h1>Progression</h1>
+      <form action="/create-character" method="POST">
+        <h3>Creating your character</h3>
+        <p>Welcome, {{ user }}! Now you will create a character who will exist entirely within the game world.</p>
+        <p>Your character name should be something that someone would call you on the street. Think "Esther" or "Tim".</p>
+        <p><label for="charname">Enter a name:</label>
+        <input type="text" id="charname" name="charname" required></p>
+        <p><label for="charname">What gender is your character?</label>
+        <input type="text" id="gender" name="gender" required></p>
+        <p><input type="submit" value="Create character"></p>
+      </form>
+  </body>
+</html>
