@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'menu.js') }}"></script>
+  </head>
+  <body>
+    <h1>Progression</h1>
+    <p>Welcome back, {{ user.name }}! Your health is {{ user.hp }}/{{ user.hpMax }}, and you have {{ user.coins }} coins.
+      You are currently at {{ loc.name }}.</p>
+      <p>Other people in this location are:</p>
+      {% for char in characters %}
+        <p>  - {{ char.name}} the {{ char.role }}</p>
+      {% endfor %}
+    <p><button type="button" name="categories" onclick=''><a href="/categories">View your skills</a></button></p>
+    <p><button type="button" name="quest" onclick=''><a href="/coming-soon">Start a quest</a></button></p>
+    <p><button type="button" name="travel" onclick=''><a href="/change-loc">Travel somewhere else</a></button></p>
+    <br><br>
+    <p><button type="button" name="logout"><a href="/logout">Log out</a></button></p>
+
+  </body>
+</html>
