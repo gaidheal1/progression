@@ -1,79 +1,79 @@
 /********Base styles ********/
 
-* {
+/* * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-}
-
+} */
+/*
 nav > ul {
 	list-style-type: none;
 }
 
 nav li {
 	display: inline;
-	
-}
 
-nav a {
+} */
+
+/*nav a {
 	display: block;
 	width: 60px;
 }
-
+/*
 nav a:hover {
 	background-color: lightgray;
 }
 
 .active {
 	background-color: lightgray;
-}
+} */
 
-body {
+body, p {
 	font-family: "Century Gothic", Helvetica, sans-serif;
-	background-color: #F0FFFF;
-	margin: 5px;	
+	/* background-color: #F0FFFF;
+	margin: 5px; */
 }
 
 h1 {
-	
+
 }
-h2 {
+/* h2 {
 	background-color: #FFD2FF;
 	border: 1px solid #D0D0D0;
-	padding: 2px;	
+	padding: 2px;
 	margin-bottom: 10px;
-}
+} */
 
-h3 {
+/* h3 {
 	background-color: #FFE2EF;
 	border: 1px solid #D0D0D0;
 	padding: 2px;
-}
+} */
 
-p {
+/* p {
 	padding: 5px;
-}
+} */
 
-ul {
+/* ul {
 	padding: 5px 5px 5px 25px;
 }
 
 li > ul {
 	padding: 0px 0px 5px 15px;
-}
+} */
 
-div {
+/* div {
 	overflow: auto;
-}
-
+} */
+/*
 .row {
 	width: 100%;
 }
 
 .container {
 	border: 1px solid grey;
-}
-
+} */
+/*
 
 .col-lg-3 {
 	width: 25%;
@@ -90,11 +90,11 @@ div {
 .col-lg-6 {
 	width: 50%;
 	float: left;
-	padding: 10px;	
+	padding: 10px;
 }
 
 .col-lg-12 {
 	width: 100%;
 	float: left;
 	padding: 10px;
-}
+} */

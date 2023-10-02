@@ -1,0 +1,153 @@
+########################
+###  Making objects  ###
+########################
+
+{
+    "questId": 1,
+    "questName" : "Searching for scraps",
+    "questCategory" : "repeat",
+    "questRepeat" : true,
+    "questDescription" : "Scouring your whereabouts for any scraps of clothing that you might be able to sell for a copper or two.",
+    "questSteps" : {
+        "step1" : "You know you won't eat today if you can't find (or steal) enough to sell to the rag and bone man.",
+        "step2" : "You start peering into dark corners, hunching over as you wander through the alleys. You only move on when people start to stare.",
+        "step3" : "You groan as you stand up straight, and lean against a wall to catch your breath."
+    },
+
+    "questMinLevel" : 0,
+    "questReqs" : {
+        "questComplete" : [],
+        "playerRole" : "",
+    },
+    "questRestrictions" : {
+
+    },
+    "questRewards" : {
+    
+    },
+
+    "questCoins" : {
+        "copper" : 50, 
+        "silver" : 0, 
+        "gold" : 0
+    },
+    "questResults" : {
+        "playerRole" : ""
+    }
+
+}
+
+########################
+
+########################
+{
+    "questId" : 2,
+    "questName" : "Traveling",
+    "questCategory" : "travel",
+    "questRepeat" : true,
+    "questDescription" : "Moving around on your daily business, or making a longer journey.",
+    "questText" : {
+        "step1" : "You set off towards your destination.",
+        "step2" : "You dodge the people and the muck on the street.",
+        "step3" : "Arriving, you narrowly miss getting run over by a fast moving cart. You almost shout after the driver, but save your breath instead."
+    },
+    "questMinLevel" : 0,
+    "questReqs" : [],
+    "questRestrictions" : {},
+    "questRewards" : {
+        
+    },
+    "questCoins" : {"copper" : 0, "silver" : 0, "gold" : 0},
+    "questResults" : {}
+}
+
+    
+    ########################
+
+    ########################
+ {
+     // Begin series (Blacksmith"s apprentice)
+     "questId" : 3,
+     "questName" : "Blacksmith's Apprentice, part 1",
+     "questCategory" : "story",
+     "questRepeat" : false,
+     "questDescription" : "You get caught stealing, by a Blacksmith who needs an apprentice.",
+     "questText" : {
+          "step1" : "As you wander through the town square, you spot a wealthy merchant with a purse carelessly dangling within reach. You approach casually, but just as your hand brushes the fabric, you get a mighty clout round your ear. As you lie stunned on the ground, the fearsome bulk of a glowering Blacksmith towers over you. Her great mitt reaches down and grabs you by the collar. 'You're coming with me', she says.",
+          "step2" : "You try to keep your feet under you as the Blacksmith hauls you along, in and out of alleyways and archways.",
+          "step3" : "Your collar is finally released, and you stand with your back against the wall as the Blacksmith inspects you, arms crossed. 'You know the punishment for theft? Do you want to keep your hands?!' She pauses. 'Now, you won't get far that way, so as I see it, you don't have a choice. I'm in need of a new apprentice, and you're better than nothing. You'll get a roof over your head, and food, and you'll learn a proper respectable trade. Seven years an apprentice, three a journeyman, and if you don't bugger it up, you'll be a Master Craftsman.",
+      },
+     "questMinLevel" : 3,
+     "questReqs" : [],
+     "questRestrictions" : {},
+     "questRewards" : [],
+     "questCoins" : {"copper" : 0, "silver" : 0, "gold" : 0},
+     "questResults" : {}
+ }
+
+
+########################
+
+########################
+{
+    "questId" : 4,
+    "questName" : "Blacksmith's Apprentice, part 2",
+    "questCategory" : "story",
+    "questRepeat" : false,
+    "questDescription" : "A new home and a new job",
+    "questText" : {
+        "step1" : "Grabbing your arm, the Blacksmith guides you toward her workshop. She stares straight ahead, but her grip tightens whenever you approach a throng of people. Further along the street, you recognise the sign with the hammer and anvil. She sweeps you in the entrance and past the forge, to the stairs at the back. She pulls you into the kitchen and sets you down none too gently in a chair. 'Don't move, you scoundrel!' Returning a few moments later, she deposits a sheet of parchment in front of you, and hands you a quill pen. She unstoppers a bottle of ink, and gestures for you to dip it. 'Now, I know you can't write, but just put your mark here,' she says, stabbing a fat finger down next to a line on the page. You do as you're told, and after putting the ink stopper back in, she whisks you off to the scullery to scrub you clean of the dirt from the street.",
+        "step2" : "You stand there miserably as the Blacksmith gives you a violent scrubbing, splashing cold water onto you and using a hard brush.",
+        "step3" : "Feeling tender but looking distinctly less grimy, you pick up the rags you left on the floor. The Blacksmith, however, whisks them out of your hands and throws them in a corner of the room. 'You won't be needing those again! Here, put these on.' She hands you threadbare, misshapen clothing which nonetheless is a marked step up from the rags now sitting in the corner. The Blacksmith stands looking appraisingly at you. 'Well, I won't say welcome home, but this is your home now, so you better get used to it. It's only me here: no bothersome husband or chiddlers.' She watches you, not unkindly. 'You look like you haven't had a good meal in a month.' She fetches a heel of stale bread and a hunk of cheese, and deposits them on the table in front of you, then reluctantly adds a small cup of beer to the meal. 'That'll get some warmth in your bones', she says.",
+    },
+    "questText" : ["step", "step", "step"],
+    "questMinLevel" : 0,
+    "questReqs" : [3],
+    "questRestrictions" : {},
+    "questRewards" : [],
+    "questCoins" : {"copper" : 0, "silver" : 0, "gold" : 0},
+    "questResults" : {
+        "role" : "Blacksmith",
+        "homeloc" : 17900,
+        "workloc" : 1703,
+    }
+}
+
+// End series (Blacksmith"s apprentice)
+########################
+
+########################
+{
+    "questId" : 5,
+    "questName" : "Pull them bellows",
+    "questCategory" : "repeat",
+    "questRepeat" : true,
+    "questDescription" : "Gotta get hench",
+    "questText" : {
+        "step1" : "Hearing your Master's familiar cry, you trot to the smithy where she thrusts her chin at you, then the bellows.",
+        "step2" : "Grasping the bellows chain, you pump for all your might.",
+        "step3" : "Soaking with sweat, you all but collapse onto the floor with relief as your Master quenches the new iron for the final time.",
+    },
+    "questMinLevel" : 1,
+    "questReqs" : [],
+    "questRestrictions" : {"role" : ["Blacksmith"]},
+    "questRewards" : [],
+    "questCoins" : {"copper" : 0, "silver" : 0, "gold" : 0},
+    "questResults" : {}
+}
+
+########################
+
+########################
+# Quest serieses
+questSeriesList : {}
+questSeriesList[100] : QuestSeries()
+"questName" : "Blacksmith's apprentice (series)",
+"questCategory" : "starttrade",
+"questDescription" : "Joining a trade will make you a basic living and could, in time, earn you recognition across the land.",
+# IDs of quests in this series
+qList : [3, 4]
+questSeriesList[100].setInfo(100, name, "questCategory", "questDescription", qList)
+########################
+
+
