@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded",
 
 			// Call server to get quest info
 			$ajaxUtils
-				.sendGetRequest("/data/quests.json",
+				.sendGetRequest("data/quests.json",
 					function (res) {
 						var message = 
 							res.quests.quest03.questText.step3

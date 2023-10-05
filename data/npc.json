@@ -1,402 +1,379 @@
-{
-  "npc100": {
-    "Attributes" : {
-      "charId" : 100,
-      "charName" : "Nell",
-      "charGender" : "female",
-      "charRole" : "Noble",
-      "charAge" : 20,
-      "charWealth" : "Rich",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+{"npcs" : [{
+  "npc100": {  
+    "id" : 100,
+    "name" : "Nell",
+    "gender" : "female",
+    "prefix" : "Lady",
+    "role" : "Noble",
+    "age" : 20,
+    "wealth" : "Rich",
+    "location" : "the Castle",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 10,
+    "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 10,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc101": {
-    "Attributes" : {
-      "charId" : 101,
-      "charName" : "Selwyn",
-      "charGender" : "male",
-      "charRole" : "Noble",
-      "charAge" : 30,
-      "charWealth" : "Rich",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc101": {
+    
+      "id" : 101,
+      "name" : "Selwyn",
+      "gender" : "male",
+      "role" : "Noble",
+      "age" : 30,
+      "wealth" : "Rich",
+      "location" : "the Castle",
+      "work" : "None",
+      "home" : "None",
+    
+      "hp" : 100,
+      "maxHp" : 100,
+      "level" : 10,
+      "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 10,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc200": {
-    "Attributes" : {
-      "charId" : 200,
-      "charName" : "Alduin",
-      "charGender" : "male",
-      "charRole" : "Courtier",
-      "charAge" : 20,
-      "charWealth" : "Well-off",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc200": {
+    
+      "id" : 200,
+      "name" : "Alduin",
+      "gender" : "male",
+      "role" : "Courtier",
+      "age" : 20,
+      "wealth" : "Well-off",
+      "location" : "the Castle",
+      "work" : "None",
+      "home" : "None",
+    
+      "hp" : 100,
+      "maxHp" : 100,
+      "level" : 10,
+      "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 10,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc201": {
-    "Attributes" : {
-      "charId" : 201,
-      "charName" : "Will",
-      "charGender" : "male",
-      "charRole" : "Guard",
-      "charAge" : 50,
-      "charWealth" : "Destitute",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc201": {
+    
+      "id" : 201,
+      "name" : "Will",
+      "gender" : "male",
+      "role" : "Guard",
+      "age" : 50,
+      "wealth" : "Destitute",
+      "location" : "the Castle",
+      "work" : "None",
+      "home" : "None",
+    
+      "hp" : 100,
+      "maxHp" : 100,
+      "level" : 5,
+      "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 5,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc300": {
-    "Attributes" : {
-      "charId" : 300,
-      "charName" : "Margaret",
-      "charGender" : "female",
-      "charRole" : "Guard",
-      "charAge" : 26,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc300": {
+    
+    "id" : 300,
+    "name" : "Margaret",
+    "gender" : "female",
+    "role" : "Guard",
+    "age" : 26,
+    "wealth" : "Poor",
+    "location" : "the Castle",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 11,
+    "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 11,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc301": {
-    "Attributes" : {
-      "charId" : 301,
-      "charName" : "Gary",
-      "charGender" : "male",
-      "charRole" : "Guard",
-      "charAge" : 18,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc301": {
+    
+    "id" : 301,
+    "name" : "Gary",
+    "gender" : "male",
+    "role" : "Guard",
+    "age" : 18,
+    "wealth" : "Poor",
+    "location" : "None",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 1,
+    "coins" : 20,
+  
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 1,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc302": {
-    "Attributes" : {
-      "charId" : 302,
-      "charName" : "John",
-      "charGender" : "male",
-      "charRole" : "Guard",
-      "charAge" : 35,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc302": {
+    
+    "id" : 302,
+    "name" : "John",
+    "gender" : "male",
+    "role" : "Guard",
+    "age" : 35,
+    "wealth" : "Poor",
+    "location" : "None",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 4,
+    "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 4,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc303": {
-    "Attributes" : {
-      "charId" : 303,
-      "charName" : "Anina",
-      "charGender" : "female",
-      "charRole" : "Guard",
-      "charAge" : 32,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc303": {
+    
+    "id" : 303,
+    "name" : "Anina",
+    "gender" : "female",
+    "role" : "Guard",
+    "age" : 32,
+    "wealth" : "Poor",
+    "location" : "None",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 7,
+    "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 7,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc304": {
-    "Attributes" : {
-      "charId" : 304,
-      "charName" : "Grim",
-      "charGender" : "male",
-      "charRole" : "Nightwatchman",
-      "charAge" : 38,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc304": {
+    
+    "id" : 304,
+    "name" : "Grim",
+    "gender" : "male",
+    "role" : "Nightwatchman",
+    "age" : 38,
+    "wealth" : "Poor",
+    "location" : "None",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 3,
+    "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 3,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc400": {
-    "Attributes" : {
-      "charId" : 400,
-      "charName" : "Amice",
-      "charGender" : "female",
-      "charRole" : "Blacksmith",
-      "charAge" : 39,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc400": {
+    
+    "id" : 400,
+    "name" : "Amice",
+    "gender" : "female",
+    "role" : "Blacksmith",
+    "age" : 39,
+    "wealth" : "Poor",
+    "location" : "Blacksmith",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 8,
+    "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 8,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc401": {
-    "Attributes" : {
-      "charId" : 401,
-      "charName" : "Joan",
-      "charGender" : "female",
-      "charRole" : "Carpenter",
-      "charAge" : 40,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc401": {
+    
+      "id" : 401,
+      "name" : "Joan",
+      "gender" : "female",
+      "role" : "Carpenter",
+      "age" : 40,
+      "wealth" : "Poor",
+      "location" : "Carpenter",
+      "work" : "None",
+      "home" : "None",
+    
+      "hp" : 100,
+      "maxHp" : 100,
+      "level" : 9,
+      "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 9,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc500": {
-    "Attributes" : {
-      "charId" : 500,
-      "charName" : "Luke",
-      "charGender" : "male",
-      "charRole" : "Minister",
-      "charAge" : 45,
-      "charWealth" : "Well-off",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc500": {
+    
+    "id" : 500,
+    "name" : "Luke",
+    "gender" : "male",
+    "role" : "Minister",
+    "age" : 45,
+    "wealth" : "Well-off",
+    "location" : "Church",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 10,
+    "coins" : 20,
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 10,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc600": {
-    "Attributes" : {
-      "charId" : 600,
-      "charName" : "Matilda",
-      "charGender" : "female",
-      "charRole" : "Barkeep",
-      "charAge" : 18,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc600": {
+    
+    "id" : 600,
+    "name" : "Matilda",
+    "gender" : "female",
+    "role" : "Barkeep",
+    "age" : 18,
+    "wealth" : "Poor",
+    "location" : "the Dead Horse",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 4,
+    "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 4,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc601": {
-    "Attributes" : {
-      "charId" : 601,
-      "charName" : "Felwyn",
-      "charGender" : "male",
-      "charRole" : "Hawker",
-      "charAge" : 62,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc601": {
+    
+    "id" : 601,
+    "name" : "Felwyn",
+    "gender" : "male",
+    "role" : "Hawker",
+    "age" : 62,
+    "wealth" : "Poor",
+    "location" : "Town Square",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 1,
+    "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 1,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc602": {
-    "Attributes" : {
-      "charId" : 602,
-      "charName" : "Aldreda",
-      "charGender" : "female",
-      "charRole" : "Hawker",
-      "charAge" : 19,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc602": {
+    
+    "id" : 602,
+    "name" : "Aldreda",
+    "gender" : "female",
+    "role" : "Hawker",
+    "age" : 19,
+    "wealth" : "Poor",
+    "location" : "Town Square",
+    "work" : "None",
+    "home" : "None",
+  
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 1,
+    "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 1,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
-  {"npc700": {
-    "Attributes" : {
-      "charId" : 700,
-      "charName" : "Bill",
-      "charGender" : "male",
-      "charRole" : "Farmer",
-      "charAge" : 49,
-      "charWealth" : "Poor",
-      "charLocation" : "None",
-      "charWork" : "None",
-      "charHome" : "None"
+  },
+  "npc700": {
+    
+    "id" : 700,
+    "name" : "Bill",
+    "gender" : "male",
+    "role" : "Farmer",
+    "age" : 49,
+    "wealth" : "Poor",
+    "location" : "farm",
+    "work" : "None",
+    "home" : "None",
+
+    "hp" : 100,
+    "maxHp" : 100,
+    "level" : 0,
+    "coins" : 20,
+    
+    "inventory" : {
+      "invSlot1" : "None"
     },
-    "Stats" : {
-      "charHealth" : 100,
-      "charMaxHealth" : 100,
-      "charLevel" : 0,
-      "charCoins" : 20
-    },
-    "Inventory" : {
-      "charInvSlot1" : "None",
-    },
-    "Equipment" : {
-      "charWeapon1" : "None",
+    "equipment" : {
+      "weapon1" : "None"
     }
-  }},
+  }
+}]
 }
