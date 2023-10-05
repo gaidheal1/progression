@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded",
             
 
 
-            var message2 = "<p>Name: " + char.name + ", " + char.age + "years old, " + char.role + "</p>";
+            var message2 = "<p>Name: " + char.name + ", " + char.age + " years old, " + char.role + "</p>";
             message2 += "<p>Level " + char.level + "</p>";
             message2 += "<p>Experience: " + char.xp + "/" + char.reqXP + "</p>";
             message2 += "<p>Health: " + char.health + "/" + char.maxHealth + "</p>";

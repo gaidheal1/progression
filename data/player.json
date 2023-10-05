@@ -1,0 +1,110 @@
+{"save" : {
+  "character": {
+    "id" : 100,
+    "name" : "Duncan",
+    "gender" : "male",
+    "role" : "Blacksmith",
+    "age" : 20,
+    "wealth" : "Poor",
+    "location" : "None",
+    "work" : "None",
+    "home" : "None",  
+    "health" : 100,
+    "maxHealth" : 100,
+    "level" : 0,
+    "xp" : 300,
+    "reqXP" : 500,
+    "coins" : 20,
+    "inventory" : {
+      "slot1" : "None"
+    },
+    "equipment" : {
+      "weapon1" : "None"
+    }
+  },
+  "player" : {
+    "lastLogin" : "2023-09-29T19:00:07",
+    "loginStreak" : 2,
+    "level" : 7,
+    "xp" : 300,
+    "reqXP" : 500,
+    "questsDone" : {
+      "questId1" : 1
+    },
+    "skills" : {
+      "piano" : {
+        "id" : 0,
+        "time" : 1000,
+        "level" : 5,
+        "category" : "Music"
+      },
+      "Chinese" : {
+        "id" : 1,
+        "time" : 500,
+        "level" : 3,
+        "category" : "Languages"
+      }
+
+    },
+    "SkillCategories" : {
+      "Music" : {
+        "id" : 0,
+        "numberSkills" : 1
+      },
+      "Languages" : {
+        "id" : 1,
+        "numberSkills" : 1
+      }
+    },
+    "Activities" : {
+      "act001" : {
+        "id" : "act001",
+        "comment" : "Love all these typeErrors!",
+        "date" : "2023-09-21 12:00:00",
+        "time" : "15",
+        "skill" : "Piano"
+      },
+      "act002" : {
+        "id" : "act002",
+        "comment" : "Practising Kapustin",
+        "date" : "2023-09-21 12:00:00",
+        "time" : "15",
+        "skill" : "Piano"
+      }
+    },
+    "Chores" : {
+      "Clean room" : {
+        "id" : 0,
+        "created": "2023-09-21 12:00:00",
+        "completed" : "2023-09-21 12:00:00",
+        "due" : "2023-09-21 12:00:00",
+        "frequency" : 7,
+        "numDone" : 4,
+        "difficulty" : 2
+      }
+    },
+    "Tasks": {
+      "Cut the hedge" : {
+        "id" : 0,
+        "timeSpent" : 30,
+        "difficulty" : 3,
+        "done" : false
+      }
+    },
+    "Metrics" : {
+      "Number of times program run" : {
+        "id" : 0,
+        "number" : 5,
+        "skill" : "Piano"
+      }
+    },
+    "Achievements" : {
+      "Skin in the game" : {
+        "description" : "Someone else has tried playing the game",
+        "difficulty" : 1,
+        "done" : false
+      }
+    }
+  }
+}
+}

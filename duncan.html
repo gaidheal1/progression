@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>Progression player - Duncan</title>
@@ -26,6 +26,8 @@
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+	<script src="js/ajax-utils.js"></script>
+	<script src="js/scriptplayer.js"></script>
 </head>
 
 <body>
@@ -53,13 +55,7 @@
 			<div class="span6">
 				<h2 >Player info</h2>
 
-				<ul>
-					<li>Date last logged in: 28/09/2023</li>
-					<li>Login streak: 2</li>
-
-
-				</ul>
-
+				<div id="playerinfo"></div>
 				<h3>Skills</h3>
 				<ul>
 					<li>Piano: level 0; 0/0 xp</li>
@@ -111,21 +107,13 @@
 						</ul>
 					</li>
 				</ul>
+				
 
 			</div>
 
 			<div class="span6">
 				<h2>Character info</h2>
-				<ul>
-					<li>Name: Duncan</li>
-					<li>Level: 1</li>
-					<li>Experience: 150/300 xp</li>
-					<li>Health: 0/0</li>
-					<li>Role: None</li>
-					<li>Coins: 5</li>
-					<li>Location: town</li>
-					<li>Inventory: empty</li>
-				</ul>
+				<div id="charinfo"></div>
 			</div>
 
 			<div class="span6">
