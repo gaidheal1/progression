@@ -1,5 +1,5 @@
-{"npcs" : [{
-  "npc100": {  
+[
+  {
     "id" : 100,
     "name" : "Nell",
     "gender" : "female",
@@ -22,11 +22,11 @@
       "weapon1" : "None"
     }
   },
-  "npc101": {
-    
+  {  
       "id" : 101,
       "name" : "Selwyn",
       "gender" : "male",
+      "prefix" : "Lord",
       "role" : "Noble",
       "age" : 30,
       "wealth" : "Rich",
@@ -45,11 +45,11 @@
       "weapon1" : "None"
     }
   },
-  "npc200": {
-    
+  {  
       "id" : 200,
       "name" : "Alduin",
       "gender" : "male",
+      "prefix" : "",
       "role" : "Courtier",
       "age" : 20,
       "wealth" : "Well-off",
@@ -68,11 +68,12 @@
       "weapon1" : "None"
     }
   },
-  "npc201": {
+  {
     
       "id" : 201,
       "name" : "Will",
       "gender" : "male",
+      "prefix" : "",
       "role" : "Guard",
       "age" : 50,
       "wealth" : "Destitute",
@@ -91,11 +92,12 @@
       "weapon1" : "None"
     }
   },
-  "npc300": {
+  {
     
     "id" : 300,
     "name" : "Margaret",
     "gender" : "female",
+    "prefix" : "",
     "role" : "Guard",
     "age" : 26,
     "wealth" : "Poor",
@@ -114,11 +116,12 @@
       "weapon1" : "None"
     }
   },
-  "npc301": {
+  {
     
     "id" : 301,
     "name" : "Gary",
     "gender" : "male",
+    "prefix" : "",
     "role" : "Guard",
     "age" : 18,
     "wealth" : "Poor",
@@ -138,11 +141,12 @@
       "weapon1" : "None"
     }
   },
-  "npc302": {
+  {
     
     "id" : 302,
     "name" : "John",
     "gender" : "male",
+    "prefix" : "",
     "role" : "Guard",
     "age" : 35,
     "wealth" : "Poor",
@@ -162,11 +166,12 @@
       "weapon1" : "None"
     }
   },
-  "npc303": {
+  {
     
     "id" : 303,
     "name" : "Anina",
     "gender" : "female",
+    "prefix" : "",
     "role" : "Guard",
     "age" : 32,
     "wealth" : "Poor",
@@ -186,11 +191,12 @@
       "weapon1" : "None"
     }
   },
-  "npc304": {
+  {
     
     "id" : 304,
     "name" : "Grim",
     "gender" : "male",
+    "prefix" : "",
     "role" : "Nightwatchman",
     "age" : 38,
     "wealth" : "Poor",
@@ -209,11 +215,12 @@
       "weapon1" : "None"
     }
   },
-  "npc400": {
+  {
     
     "id" : 400,
     "name" : "Amice",
     "gender" : "female",
+    "prefix" : "",
     "role" : "Blacksmith",
     "age" : 39,
     "wealth" : "Poor",
@@ -232,11 +239,12 @@
       "weapon1" : "None"
     }
   },
-  "npc401": {
+  {
     
       "id" : 401,
       "name" : "Joan",
       "gender" : "female",
+      "prefix" : "",
       "role" : "Carpenter",
       "age" : 40,
       "wealth" : "Poor",
@@ -256,11 +264,12 @@
       "weapon1" : "None"
     }
   },
-  "npc500": {
+  {
     
     "id" : 500,
     "name" : "Luke",
     "gender" : "male",
+    "prefix" : "Reverend",
     "role" : "Minister",
     "age" : 45,
     "wealth" : "Well-off",
@@ -279,11 +288,12 @@
       "weapon1" : "None"
     }
   },
-  "npc600": {
+  {
     
     "id" : 600,
     "name" : "Matilda",
     "gender" : "female",
+    "prefix" : "",
     "role" : "Barkeep",
     "age" : 18,
     "wealth" : "Poor",
@@ -303,11 +313,12 @@
       "weapon1" : "None"
     }
   },
-  "npc601": {
+  {
     
     "id" : 601,
     "name" : "Felwyn",
     "gender" : "male",
+    "prefix" : "",
     "role" : "Hawker",
     "age" : 62,
     "wealth" : "Poor",
@@ -327,11 +338,12 @@
       "weapon1" : "None"
     }
   },
-  "npc602": {
+  {
     
     "id" : 602,
     "name" : "Aldreda",
     "gender" : "female",
+    "prefix" : "",
     "role" : "Hawker",
     "age" : 19,
     "wealth" : "Poor",
@@ -351,11 +363,12 @@
       "weapon1" : "None"
     }
   },
-  "npc700": {
+  {
     
     "id" : 700,
     "name" : "Bill",
     "gender" : "male",
+    "prefix" : "",
     "role" : "Farmer",
     "age" : 49,
     "wealth" : "Poor",
@@ -375,5 +388,4 @@
       "weapon1" : "None"
     }
   }
-}]
-}
+]
