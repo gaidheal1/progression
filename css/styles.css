@@ -14,10 +14,11 @@ main {
     padding: 0 10px;
     margin: 0;
     /*width: 100%;*/
- 
+
 }
 .navbox {
-    background-color: #dfdfdf;
+    
+    background: linear-gradient(#d2d2d2, #e2e2e2);
     height: 50px;
     width: 100%;
     display: flex;
@@ -35,7 +36,7 @@ h2 {
 
 }
 .navbox h1 {
-        
+
 }
 
 .container {
@@ -52,11 +53,11 @@ h2 {
 .col {
     width: 50%;
     /* min-width: 300px; */
-     border: 1px solid gray; 
+     border: 1px solid gray;
     margin: 0 ;
     padding: 0 10px;
     font-size: .9rem;
-    
+
 }
 
 .col.left {
@@ -95,7 +96,7 @@ h2 {
     margin: 10px 0;
 }
 .central-header {
-    
+
 }
 
 .most-recent {
@@ -127,5 +128,5 @@ h2 {
 .task-entry {
     display: inline-block;
     margin-top: 5px;
-    
+
 }
