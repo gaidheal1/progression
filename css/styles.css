@@ -1,0 +1,131 @@
+html {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0 auto;
+    /* min-width: 600px;
+    max-width: 1000px; */
+    width: 100vw;
+    padding: 0;
+}
+main {
+    padding: 0 10px;
+    margin: 0;
+    /*width: 100%;*/
+ 
+}
+.navbox {
+    background-color: #dfdfdf;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+}
+h2 {
+    margin: 10px 0 0 0;
+
+}
+.navbox h1 {
+        
+}
+
+.container {
+    width: 100%;
+    /* min-height: 200px; */
+    display: flex;
+    justify-content: center;
+    margin: 20px auto 0 auto;
+    padding: 0;
+    min-width: 600px;
+    max-width: 1000px;
+}
+
+.col {
+    width: 50%;
+    /* min-width: 300px; */
+     border: 1px solid gray; 
+    margin: 0 ;
+    padding: 0 10px;
+    font-size: .9rem;
+    
+}
+
+.col.left {
+    margin-right: 10px;
+}
+
+.col.right {
+    margin-left: 10px;
+}
+
+.col h1 {
+    border-bottom: 1px solid;
+    margin: 10px 80px 5px 30px;
+}
+
+.info {
+    width: 100%;
+    margin: 10px 0 0 0;
+    /* padding: 0 10px; */
+}
+
+.name {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.task-form {
+    margin: 10px 0;
+}
+.place {
+    font-size: 1.1rem;
+    text-decoration: underline;
+}
+
+.task-display {
+    margin: 10px 0;
+}
+.central-header {
+    
+}
+
+.most-recent {
+    font-weight: bold;
+}
+
+.task-display #player-messages {
+    margin: 5px 0 0 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.timestamp {
+    font-size: .9em;
+}
+
+.player-input {
+    width: 80px
+}
+
+#edit-btn {
+    margin-left : 15px
+}
+
+#task-minutes {
+    width: 40px;
+}
+
+.task-entry {
+    display: inline-block;
+    margin-top: 5px;
+    
+}
