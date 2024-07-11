@@ -1,7 +1,14 @@
 const taskMinutes = document.getElementById('task-minutes');
 const taskName = document.getElementById('task-name');
-const finishedButton = document.getElementById('submit');
+const taskInProgress = document.getElementById('task-in-progress');
+const taskForm = document.getElementById('task-form')
+
 const editBtn = document.getElementById('edit-btn');
+const startButton = document.getElementById('submit');
+const finishedButton = document.getElementById('finished-btn');
+const currentTaskText = document.getElementById('current-task');
+const timeLeftText = document.getElementById('time-left');
+
 const xpTextPlayer = document.getElementById('player-xp');
 const xpTextChar = document.getElementById('char-xp');
 const levelTextPlayer = document.getElementById('player-level');
@@ -18,12 +25,15 @@ const playerMessageText = document.getElementById('player-messages');
 
 let userMessage = [];
 let xpGained = 0
+
 let player = {
-    name : "",
-    place: "",
+    name : "Anon",
+    place: "Balham",
     level : 1,
     xp : 0,
     jobs : [],
+    tempJob : {},
+    status: "resting",
 };
 let char = {
     name: "",
@@ -31,9 +41,11 @@ let char = {
     place: "",
     level: 1,
     xp: 0,
+    tempJob: {},
 };
 let charJob = "";
 let charJobs = [];
+
 
 const characterJobs = [
     {
@@ -82,21 +94,7 @@ const placeNames = [
     "Edinburgh",
     "Missississippi",
 ]
-
-function updateCharJob() {
-    char.job = characterJobs[Math.floor(Math.random() * characterJobs.length)];
-    document.getElementById('char-job').innerText = `${char.job.action}. They say "${char.job.description}"`;
-};
-function updateLocalStorage() {
-  localStorage.setItem("player", JSON.stringify(player));
-}
-function updatePlayer() {
-    playerNameText.innerHTML = player.name;
-    playerPlaceText.innerHTML = player.place;
-    levelTextPlayer.innerHTML = player.level;
-    levelTextPlayer.innerHTML = `Level ${player.level}; `
-    xpTextPlayer.innerHTML = `You have ${player.xp} XP`;
-}
+player = pageSetup();
 
 function pageSetup() {
     char.name = characterNames[Math.floor(Math.random() * characterNames.length)];
@@ -105,35 +103,45 @@ function pageSetup() {
     document.getElementById('char-name2').innerText = char.name
     document.getElementById('char-place').innerText = char.place
     updateMessage("Welcome back!");
-    playerRetreival = JSON.parse(localStorage.getItem("player"));
-    if (playerRetreival !== null) {
-        player = playerRetreival;
-    }
-    update();
-    return;
-}
-
-function clearInput() {
-  taskMinutes.value = "";
-  taskName.value = "";
-}
-pageSetup();
-
-function levelUpCheck(level, xp) {
-    let xpRequired = level * 100;
-    if (xp < xpRequired) {
-        return false;
+    dataRetreival = JSON.parse(localStorage.getItem("data"));
+    if (dataRetreival !== null) {
+        //const {player, char} = dataRetreival;
+        player = dataRetreival;
     }
     else {
-        while(xp>xpRequired) {
-            level += 1;
-            xp -= xpRequired;
-            xpRequired = level * 100;
-        }
-        return [level, xp];
+        const player = {
+            name : "Anon",
+            place: "Balham",
+            level : 1,
+            xp : 0,
+            jobs : [],
+            tempJob : {},
+            status: "resting",
+        };
+        /*const char = {
+            name: "",
+            job: "",
+            place: "",
+            level: 1,
+            xp: 0,
+            tempJob: {},
+        }*/
     }
+    update();
+    return player;
 };
-
+function update() {
+    updateScreen();
+    updateCharJob();
+    updateLocalStorage();
+    updatePlayer();
+    clearInput();
+};
+/*
+const data = pageSetup();
+player = data[0];
+char = data[1];
+*/
 function updateScreen() {
     let allHTML = ``;
     player.jobs.forEach(task => {
@@ -148,6 +156,50 @@ function updateScreen() {
         </div>`
     });
     allCharacter.innerHTML = allHTML;
+};
+
+function updateCharJob() {
+    char.job = characterJobs[Math.floor(Math.random() * characterJobs.length)];
+    document.getElementById('char-job').innerText = `${char.job.action}. They say "${char.job.description}"`;
+};
+
+function updateLocalStorage() {
+    /*
+    const data = [player, char]
+    localStorage.setItem("data", JSON.stringify(data));
+    */
+    const data1 = player;
+    localStorage.setItem("data", JSON.stringify(data1));
+};
+
+function updatePlayer() {
+    playerNameText.innerText = player.name;
+    playerPlaceText.innerText = player.place;
+    levelTextPlayer.innerHTML = `Level ${player.level}; `
+    xpTextPlayer.innerHTML = `You have ${player.xp} XP`;
+};
+
+function clearInput() {
+    taskMinutes.value = "";
+    taskName.value = "";
+};
+
+
+
+
+function levelUpCheck(level, xp) {
+    let xpRequired = level * 100;
+    if (xp < xpRequired) {
+        return false;
+    }
+    else {
+        while(xp>xpRequired) {
+            level += 1;
+            xp -= xpRequired;
+            xpRequired = level * 100;
+        }
+        return [level, xp];
+    }
 };
 
 function updateMessage(string) {
@@ -168,18 +220,14 @@ function updateMessage(string) {
     playerMessageText.innerHTML = allHTML;
 };
 
-function update() {
-    updateScreen();
-    updateCharJob();
-    updateLocalStorage();
-    clearInput();
-};
 
-function taskSubmit() {
 
-    let string = "";
-
-    if (editBtn.innerText == "Save") {
+function startTask() {
+    if (player.status === "working") {
+        updateMessage("You're already working on a task: come back when you've finished :)");
+        return;
+    }
+    else if (editBtn.innerText == "Save") {
         updateMessage("Please save new name and place before submitting a task!");
         return;
     }
@@ -192,21 +240,69 @@ function taskSubmit() {
         updateMessage("Please enter a task name less than 100 characters and a number below 1000!");
         return;
     }
-
-    else {
+    else {    
         const taskMinutesNum = Number(taskMinutes.value);
+        
         xpGained = taskMinutesNum * 3;
+        // create job objects
+        player.tempJob = {
+            id : Date.now(),
+            "name" : taskName.value,
+            "minutes" : taskMinutesNum,
+            "xp" : xpGained,
+        };
+        char.tempJob = {
+            id : Date.now(),
+            "name" : char.job.action,
+            "minutes" : taskMinutesNum,
+            "xp" : xpGained,
+        };
+        taskInProgress.toggleAttribute("hidden");
+        taskForm.toggleAttribute("hidden");
+        currentTaskText.innerText = `You are doing this: ${taskName.value}`
+        const minutesLeft = calcMinutesLeft();
+        timeLeftText.innerHTML = `You have ${minutesLeft} minutes left.`
+        player.status = "working";
+        //taskInProgress.innerHTML = `<span> Come back in ${taskMinutesNum} minutes!</span>`;
+    }
+}
+
+function calcMinutesLeft() {
+    const now = new Date;
+    const jobEnd = player.tempJob.id + (player.tempJob.minutes * 60000)
+    const minutesLeft = (jobEnd-now)/60000
+    if (minutesLeft < 1 && minutesLeft > 0) {
+        return 1;
+    }
+    else if (minutesLeft > 1) {
+        return Math.ceil(minutesLeft);
+    }
+    else {
+        return 0;
+    }
+};
+
+function endTask() {
+    if (finishedButton.innerText === "Finished?") {
+        
+        const minutesLeft = calcMinutesLeft();
+        
+        if (minutesLeft == 0) {
+            finishedButton.innerText = "Finished!";
+            timeLeftText.innerText = "Click for rewards!"
+        } 
+        else {
+            timeLeftText.innerHTML = `Still ${minutesLeft} minutes left to go!`
+        }
+    }
+    else if (finishedButton.innerText === "Finished!") {
 
         updateMessage("You completed a task: congratulations!");
-        console.log(player.jobs);
-        player.jobs.unshift(
-            {
-                id : Date.now(),
-                "name" : taskName.value,
-                "minutes" : taskMinutesNum,
-                "xp" : xpGained,
-            }
-        );
+        
+        player.jobs.unshift(player.tempJob);
+        player.tempJob = {};
+        charJobs.unshift(char.tempJob);
+        char.tempJob = {};
 
         if (player.jobs.length > 1) {
             diff = (player.jobs[0].id - player.jobs[1].id);
@@ -216,14 +312,6 @@ function taskSubmit() {
                 updateMessage("You are on a streak!");
             };
         };
-
-        charJobs.unshift(
-            {
-                "name" : char.job.action,
-                "minutes" : taskMinutesNum,
-                "xp" : xpGained,
-            }
-        );
 
         isLevelUp = false;
         player.xp += xpGained;
@@ -245,22 +333,31 @@ function taskSubmit() {
 
         xpTextPlayer.innerHTML = `You have ${player.xp} XP`;
         xpTextChar.innerHTML = `${char.name} has ${char.xp} XP`;
-
-
+        player.status = "resting";
         update();
-    }
-    //return;
+
+        finishedButton.innerText = "Finished?";
+        taskInProgress.toggleAttribute("hidden");
+        taskForm.toggleAttribute("hidden");
+    };
+    return;
 };
 
 function editPlayer() {
     if (editBtn.innerText == "Edit") {
-        playerNameText.innerHTML = `
-            <input id="new-player-name" type="text" placeholder="eg Duncan" class="player-input">`;
-        playerPlaceText.innerHTML = `
-            <input id="new-player-place" type="text" placeholder="eg Guildford" class="player-input">`;
-        document.getElementById('new-player-name').value = player.name;
-        document.getElementById('new-player-place').value = player.place;
-        editBtn.innerText = "Save";
+        if (player.status === "working") {
+            updateMessage("You're already working on a task: come back when you've finished :)");
+            return;
+        }
+        else {
+            playerNameText.innerHTML = `
+                <input id="new-player-name" type="text" placeholder="eg Duncan" class="player-input">`;
+            playerPlaceText.innerHTML = `
+                <input id="new-player-place" type="text" placeholder="eg Guildford" class="player-input">`;
+            document.getElementById('new-player-name').value = player.name;
+            document.getElementById('new-player-place').value = player.place;
+            editBtn.innerText = "Save";
+        };
     }
     else if (editBtn.innerText == "Save") {
         const newPlayerName = document.getElementById('new-player-name').value;
@@ -269,7 +366,7 @@ function editPlayer() {
             updateMessage("Please enter a name and a place!");
         }
         else if (newPlayerName.length > 15 || newPlayerPlace.length > 15) {
-            updateMessage("Please don't enter something over 15 characters!");
+            updateMessage("Please don't enter something longer than 15 characters!");
         }
         else {
             player.name = newPlayerName;
@@ -281,6 +378,8 @@ function editPlayer() {
     }
 };
 
-finishedButton.addEventListener("click", taskSubmit);
+startButton.addEventListener("click", startTask);
+
+finishedButton.addEventListener("click", endTask);
 
 editBtn.addEventListener("click", editPlayer);

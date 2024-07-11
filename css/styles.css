@@ -37,6 +37,7 @@ h2 {
     margin: 10px 0 0 0;
 
 }
+
 .navbox h1 {
 
 }
@@ -131,4 +132,16 @@ h2 {
     display: inline-block;
     margin-top: 5px;
 
+}
+
+.task-in-progress {
+    margin: 10px 0;
+    border: 1px dotted gray;
+    padding: 5px;
+}
+.hidden {
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    position: absolute;
 }

@@ -25,17 +25,21 @@
                         <span id="player-level" class="level">Level 1; </span><span id="player-xp" class="xp">0 xp out of 100 xp</span>
                     </div>
 
-                    <form id="task-form" class="task-form">
+                    <form id="task-form" class="task-form" >
                         <fieldset class="task-entry">
                             <legend>Enter your task details:</legend>
                             <label for="task-name" class="task-entry">Working on:</label>    
                             <textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" ></textarea>
                             <label for="task-minutes" class="task-entry">Time spent (in minutes):</label>   
                             <input type="number" placeholder="5" required id="task-minutes" name="task-minutes" >
-                            <button type="button" id="submit" class="task-entry">Finished!</button>
+                            <button type="button" id="submit" class="task-entry">Start task</button>
                         </fieldset>
-
                     </form>
+                    <div id="task-in-progress" class="task-in-progress" hidden="true">
+                        <span id="current-task"></span>
+                        <span id="time-left">Your task is currently cooking!</span>
+                        <button class="finished" id="finished-btn" type="button">Finished?</button>
+                    </div>
 
                 </div>
                 <div class="col right">
