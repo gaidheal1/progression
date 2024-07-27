@@ -43,12 +43,13 @@
                 <div class="col left">
                     <h2>Activity</h2>
                     <div id="activity-content">
+                        <div id="activity-status">No activity running</div>
                         <div id="task" class="task-entry-container">
                             <label for="task-name" id="task-entry-label" class="task-entry">What are you going to work on?</label>    
                             <textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" maxlength="80" minlength="4"></textarea>
                         </div>
                         <div id="activity-btns">
-                            <button type="button" id="task-submit" class="task-entry">Enter task</button>
+                            <button type="button" id="task-submit" class="task-entry">Enter activity</button>
                         </div>
                         <div id="finished-jobs" hidden="true">
                             <div id="previous-activities" class="previous-activities-header">
@@ -63,6 +64,7 @@
                 </div>
                 <div class="col right">
                     <h2>Quest</h2>
+                    <div id="quest-status">No quest running</div>
                     <div id="quest-content">
                         <span>No quest selected.</span>
                     </div>
