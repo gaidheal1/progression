@@ -85,7 +85,7 @@ const quests = [
         id: 0,
         title: "Kill rats",
         description: "There are some rats in the field we're trying to farm. If you kill them, we can get back to work. Please help!",
-        totalLength: 0.3,
+        totalLength: 20,
         stages: [
             {
                 stageLength: 0,
