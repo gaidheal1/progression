@@ -9,15 +9,17 @@ body {
     max-width: 1000px; */
     width: 100vw;
     padding: 0;
+    background: linear-gradient(#c1e1c1, #c1d1c1);
 }
 main {
     padding: 0 10px;
     margin: 0;
+    /*background: linear-gradient(#e1c1e1);*/
     /*width: 100%;*/
 
 }
 .navbox {
-    
+
     background: linear-gradient(#d2d2d2, #e2e2e2);
     height: 50px;
     width: 100%;
@@ -32,19 +34,22 @@ h1 {
     margin: 0;
 }
 h2 {
-    margin: 10px 0 0 0;
+    margin: 0;
+    padding: 0;
 
 }
+
+/*
 .navbox h1 {
-
 }
+*/
 
 .container {
     width: 100%;
     /* min-height: 200px; */
     display: flex;
     justify-content: center;
-    margin: 20px auto 0 auto;
+    margin: 10px auto 0 auto;
     padding: 0;
     min-width: 600px;
     max-width: 1000px;
@@ -53,34 +58,34 @@ h2 {
 .col {
     width: 50%;
     /* min-width: 300px; */
-     border: 1px solid gray;
+    border: 1px solid gray;
     margin: 0 ;
-    padding: 0 10px;
+    padding: 5px;
     font-size: .9rem;
 
 }
 
 .col.left {
-    margin-right: 10px;
+    margin-right: -1px;
 }
 
 .col.right {
-    margin-left: 10px;
+    margin-left: 0;
 }
 
-.col h1 {
-    border-bottom: 1px solid;
-    margin: 10px 80px 5px 30px;
+.col h2 {
+    border-bottom: 1px solid gray;
+    margin: 5px 80px 5px 30px;
 }
 
 .info {
     width: 100%;
-    margin: 10px 0 0 0;
+    margin: 0 5px;
     /* padding: 0 10px; */
 }
 
 .name {
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: bold;
 }
 
@@ -88,22 +93,31 @@ h2 {
     margin: 10px 0;
 }
 .place {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     text-decoration: underline;
 }
 
+.level, .xp {
+    font-size: .8rem;
+}
+
 .task-display {
-    margin: 10px 0;
+    margin: 3px 0;
 }
+
+#rewards-btn {
+    margin-top: 5px;
+}
+
+/*
 .central-header {
-
 }
-
+*/
 .most-recent {
     font-weight: bold;
 }
 
-.task-display #player-messages {
+.task-display ul {
     margin: 5px 0 0 0;
     padding: 0;
     list-style-type: none;
@@ -121,12 +135,43 @@ h2 {
     margin-left : 15px
 }
 
-#task-minutes {
-    width: 40px;
+
+#task-name {
+    margin-top: 5px;
+    resize: vertical;
 }
 
-.task-entry {
-    display: inline-block;
-    margin-top: 5px;
 
+.task-entry {
+    margin-top: 10px;
+    overflow: auto;
+}
+
+.task-in-progress {
+    margin: 10px 0;
+    border: 1px dotted gray;
+    padding: 5px;
+}
+
+#task-submit {
+    margin-top: 5px;
+    width: 100px;
+}
+
+#activity-btns {
+    margin-top: 10px;
+}
+#pause-activity-btn {
+    margin-right: 10px;
+    width: 60px;
+}
+
+.current-task-msg {
+    margin-top: 5px;
+}
+.hidden {
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    position: absolute;
 }
