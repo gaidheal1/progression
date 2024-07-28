@@ -1,3 +1,3 @@
 # progression
 
-This is just the beginning.md
+This is just the beginning
