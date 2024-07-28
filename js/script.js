@@ -88,29 +88,78 @@ const quests = [
         totalLength: 20,
         stages: [
             {
-                stageLength: 0,
                 text: "Travelling to the field",
+                end: 5,
             },
             {
-                stageLength: 5,
                 text: "Fighting the rats",
+                end: 12,
             },
             {
-                stageLength: 10,
                 text: "Harvesting the bodies",
+                end: 15,
             },
             {
-                stageLength: 15,
                 text: "Travelling back to village",
+                end: 20,
             },
         ],
         levelMin: 0,
         levelMax: 10,
         coinReward: 10,
-        xpReward: 60,
+        xpReward: 80,
         time: 0,
         timerStart: 0,
         timeLeft: 0,
+        activeStage: 0,
+    },
+    {
+        id: 1,
+        title: "Search for scraps",
+        description: "If you keep your eyes peeled, you're bound to find something useful, edible, or sellable.",
+        totalLength: 10,
+        stages: [
+            {
+                text: "Peering into nooks and crannies",
+                end: 8,
+            },
+            {
+                text: "Poring over the various scraps they found",
+                end: 10,
+            },
+        ],
+        levelMin: 0,
+        levelMax: 10,
+        coinReward: 15,
+        xpReward: 40,
+        time: 0,
+        timerStart: 0,
+        timeLeft: 0,
+        activeStage: 0,
+    },
+    {
+        id: 2,
+        title: "Test",
+        description: "2 stages, both 3 seconds; quest length 6 seconds ",
+        totalLength: .1,
+        stages: [
+            {
+                text: "Stage 0",
+                end: .05,
+            },
+            {
+                text: "Stage 1",
+                end: .1,
+            },
+        ],
+        levelMin: 0,
+        levelMax: 10,
+        coinReward: 15,
+        xpReward: 40,
+        time: 0,
+        timerStart: 0,
+        timeLeft: 0,
+        activeStage: 0,
     },
 ];
 
@@ -424,7 +473,8 @@ function prepActivity() {
             <button id="edit-activity-btn">Edit activity</button>
             <button id="start-activity-btn" >Start activity</button>
         `;
-        if (game.questState != "paused") {
+        console.log(game.questState);
+        if (game.questState != "paused" && game.questState != "ready") {
             document.getElementById('start-activity-btn').setAttribute("disabled", true);
         }
         document.getElementById('edit-activity-btn').addEventListener("click", editActivity);
@@ -476,8 +526,9 @@ function pauseActivity() {
     
     timerStop();
     updateTime();
-    console.log("quest time: ", char.currentQuest.time/60000);
-    console.log(char.currentQuest.timeLeft);
+    updateQuestStage();
+    //console.log("quest time: ", char.currentQuest.time/60000);
+    console.log("Quest time: ", char.currentQuest.timeLeft/60000);
 
     if (char.currentQuest.timeLeft <= 0) {
         console.log('runs?');
@@ -530,9 +581,9 @@ function submitActivity() {
 /*  ******              ******                                             **********************************/
 /*  ******              ******                  QUEST FUNCTIONS            **********************************/
 /*  ******        **    ******                                             **********************************/
-/*   ******        *** ******       *************************************************************************/
-/*      ********  *******     ***  *************************************************************************/
-/*          **********   *****      *************************************************************************/
+/*   ******        *** *****        *************************************************************************/
+/*      ********  *******     ***   *************************************************************************/
+/*          **********  *******     *************************************************************************/
 
 
 // List of tests for eligible quests
@@ -547,30 +598,67 @@ function setQuestTimeLeft() {
     char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
 };
 
+function updateQuestStage() {
+    const q = char.currentQuest;
+    // Check current quest stage not the last one
+    if (q.activeStage < q.stages.length - 1) {
+        // Check if time is over next stage's start time
+        if (q.time/60000 > q.stages[q.activeStage].end) {
+            if (q.activeStage === 0) {
+                const stagesHTML = `
+                <div id="previous-stages" class="previous-stages-header">
+                <h3>Previously</h3>
+                </div>
+                <ul id="previous-stages-list" class="previous-stages-list">
+
+                </ul>
+                `;
+                questContent.insertAdjacentHTML('beforeend', stagesHTML);
+            }
+            // Loop through stages adding to screen list and updating until correct stage reached
+            while (q.time/60000 > q.stages[q.activeStage].end) {
+                const listHTML = `
+                <li id="previous-stage-item">${char.name} was ${q.stages[q.activeStage].text.toLowerCase()}</li>
+                `;
+                q.activeStage += 1;
+                document.getElementById('previous-stages-list').insertAdjacentHTML('afterbegin', listHTML);
+            }
+            document.getElementById('quest-stage-text').innerText = q.stages[q.activeStage].text.toLowerCase();
+        }
+    }
+};
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 function listQuests() {
     questFinishedArea.setAttribute("hidden", true);
     game.questState ="none";
     player.questJobs = [];
     questContent.innerHTML = `
             <div class="choose-quest">
-            <span>Choose a quest from the list below:</span>
-            <ul id="quest-list">
+                <div class="choose-quest-text"><span>Choose a quest from the list below:</span></div>
+                <div id="quest-list">
     `;
     quests.forEach(quest => {
         //console.log("quest obj: ", quests[0]);
         if (checkQuestEligible(quest)) {
             document.getElementById('quest-list').insertAdjacentHTML('afterbegin', `
-                <li class="quest-item"><button id="quest-${quest.id}"> ${quest.title}: ${quest.totalLength} minutes</button></li>
+                <div class="quest-item">
+                    <div ><button id="quest-${quest.id}"> ${quest.title}: ${quest.totalLength} minutes</button></div>
+                    <div class="quest-description">${quest.description}</div>
+                </div>
             `);
             document.getElementById(`quest-${quest.id}`).addEventListener("click", () => {
                 game.questState = "ready";
                 char.currentQuest = quest;
                 // Set quest time remaining in milliseconds
                 setQuestTimeLeft();
+                console.log('quest stage text: ', char.currentQuest.stages[0].text)
                 questContent.innerHTML = `
-                    <div>Title: ${char.currentQuest.title}</div>
+                    <div class="quest-title">Title: ${char.currentQuest.title}</div>
                     <div>Time left: <span id="quest-time-left">${char.currentQuest.totalLength}</span> minutes</div>
-                    <div class="quest-stage">${char.name} is ${char.currentQuest.stages[0].text.toLowerCase()}
+                    <div class="quest-stage">${char.name} is <span id="quest-stage-text">${char.currentQuest.stages[0].text.toLowerCase()}</span></div>
                 `;
                 if (game.activityState === "paused") {
                     document.getElementById('resume-activity-btn').removeAttribute("disabled");
@@ -587,7 +675,7 @@ function listQuests() {
         };
     });
     questContent.insertAdjacentHTML('beforeend', `
-        </ul>
+        </div>
         </div>  
     `);
     
@@ -671,6 +759,7 @@ function showRewards() {
     player.questJobs = [];
     char.currentQuest.time = 0;
     char.currentQuest.timerStart = 0;
+    char.currentQuest.activeStage = 0;
     setQuestTimeLeft();
     char.currentQuest = {};
 
