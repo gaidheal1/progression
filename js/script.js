@@ -16,10 +16,19 @@ const questJobsList = document.getElementById('quest-jobs-list');
 const editPlayerButton = document.getElementById('edit-btn');
 const startButton = document.getElementById('task-submit');
 
+const playerNameText = document.getElementById('player-name');
+const playerPlaceText = document.getElementById('player-place');
 const playerXpText = document.getElementById('player-xp');
-const charXpText = document.getElementById('char-xp');
 const playerLevelText = document.getElementById('player-level');
+const playerCoinsText = document.getElementById('player-coins');
+const playerHpText = document.getElementById('player-hp');
+
+const charNameText = document.getElementById('char-name');
+const charPlaceText = document.getElementById('char-place');
+const charXpText = document.getElementById('char-xp');
 const charLevelText = document.getElementById('char-level');
+const charCoinsText = document.getElementById('char-coins');
+const charHpText = document.getElementById('char-hp');
 
 const allPlayer = document.getElementById('player-all');
 const allCharacter = document.getElementById('character-all');
@@ -31,8 +40,7 @@ const questResultsArea = document.getElementById('quest-results');
 const activityStatus = document.getElementById('activity-status');
 const questStatus = document.getElementById('quest-status');
 
-const playerNameText = document.getElementById('player-name');
-const playerPlaceText = document.getElementById('player-place');
+
 const playerMessageText = document.getElementById('player-messages');
 const charMessageText = document.getElementById('char-messages');
 
@@ -46,7 +54,7 @@ let game = {
 };
 
 function definePlayer() {
-    const player = {
+    return {
         name : "Anon",
         place: "Balham",
         level : 1,
@@ -60,25 +68,34 @@ function definePlayer() {
         questsDone: {},
         currentActivity : {},
         status: "resting",
+        lastLogin: "",
+        loginStreak: 0,
     };
-    return player;
 };
 //const player = definePlayer();
 
-let char = {
-    name: "",
-    place: "",
-    level: 1,
-    xp: 0,
-    xpRequired: 100,
-    hp: 100,
-    hpMax: 100,
-    currentQuest: {},
-    questsDone: [],
-    status: "resting",
+function defineChar() {
+    const name = characterNames[Math.floor(Math.random() * characterNames.length)];
+    const place = placeNames[Math.floor(Math.random() * placeNames.length)];
+    
+    return {
+        name: name,
+        place: place,
+        level: 1,
+        xp: 0,
+        xpRequired: 100,
+        coins: 0,
+        hp: 100,
+        hpMax: 100,
+        currentQuest: {},
+        questsDone: [],
+        jobs: [],
+        status: "resting",
+    };
 };
-let charJob = "";
-let charJobs = [];
+
+//let charJob = "";
+//let charJobs = [];
 
 const quests = [
     {
@@ -214,38 +231,52 @@ const placeNames = [
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-function pageSetup() {
-    char.name = characterNames[Math.floor(Math.random() * characterNames.length)];
-    char.place = placeNames[Math.floor(Math.random() * placeNames.length)];
-    document.getElementById('char-name').innerText = char.name;
-    //document.getElementById('char-name2').innerText = char.name;
-    document.getElementById('char-place').innerText = char.place;
+function charactersSetup() {
+    let player = {};
+    let char = {};
+    
     updateMessage("player", "Welcome back!");
     updateMessage("char", "I'm glad you're here.");
-    dataRetreival = JSON.parse(localStorage.getItem("data"));
-    if (dataRetreival !== null) {
-        //const {player, char} = dataRetreival;
-        player = dataRetreival;
+    playerRetreival = JSON.parse(localStorage.getItem("player"));
+    if (playerRetreival !== null) {
+        player = playerRetreival;
     }
     else {
         player = definePlayer();
-    };
-        /*const char = {
-            name: "",
-            job: "",
-            place: "",
-            level: 1,
-            xp: 0,
-            currentActivity: {},
-        }*/
-    
-    listQuests();
-    update();
-    return player;
+    }
+    charRetreival = JSON.parse(localStorage.getItem("char"));
+    if (charRetreival !== null) {
+        char = charRetreival;
+    }
+    else {
+        char = defineChar();
+    }
+    return {player, char};
 };
 
-player = pageSetup();
+const {player, char} = charactersSetup();
 
+// Login streak checker WIP
+/* function checkLogin() {
+    const now = new Date();
+    const nowDate = now.getDate();
+    const nowMonth = now.getMonth();
+    const nowYear = now.getFullYear();
+    console.log(now);
+
+    if (player.lastLogin !== "string") {
+        // Last logged in earlier today
+        if (player.lastLogin.toLocaleDateString() === now.toLocaleDateString()) {
+            updateMessage("player", "Welcome back! You last logged in earlier today.")
+        }
+        // Last logged in yesterday
+        else if ()
+    }
+    player.lastLogin = new Date();
+}
+checkLogin(); */
+update();
+listQuests();
 
 /***********************************************************************************************************/
 /***********************************************************************************************************/
@@ -291,24 +322,22 @@ function statusUpdate() {
 
 function updateScreen() {
     let playerHTML = ``;
-    
-    player.jobs.forEach(job => {
-        playerHTML += `<div class="info">You did "${job.name}" for ${Math.ceil(job.time/60000)} minutes
-        </div>`
-    });
+    if (player.jobs.length > 0) {
+        player.jobs.forEach(job => {
+            playerHTML += `<div class="info">You did "${job.name}" for ${Math.ceil(job.time/60000)} minutes
+            </div>`
+        });
+    };
     allPlayer.innerHTML = playerHTML;
 
     let charHTML = ``
-    charJobs.forEach(job => {
-        charHTML += `<div class="info">${char.name} completed "${job.title}" in ${Math.ceil(job.time/60000)} minutes, and gained ${job.xpReward} XP!
-        </div>`
-    });
+    if (char.jobs.length > 0) {
+        char.jobs.forEach(job => {
+            charHTML += `<div class="info">${char.name} completed "${job.title}" in ${Math.ceil(job.time/60000)} minutes, and gained ${job.xpReward} XP!
+            </div>`
+        });
+    };
     allCharacter.innerHTML = charHTML;
-};
-
-function updateCharJob() {
-    //char.job = characterJobs[Math.floor(Math.random() * characterJobs.length)];
-    //document.getElementById('char-job').innerText = `${char.job.action}. They say "${char.job.description}"`;
 };
 
 function updateLocalStorage() {
@@ -316,19 +345,26 @@ function updateLocalStorage() {
     const data = [player, char]
     localStorage.setItem("data", JSON.stringify(data));
     */
-    const data1 = player;
-    localStorage.setItem("data", JSON.stringify(data1));
+    //const data1 = player;
+    //console.log(player);
+    localStorage.setItem("player", JSON.stringify(player));
+    localStorage.setItem("char", JSON.stringify(char));
 };
 
 function updateInfoText() {
     playerNameText.innerText = player.name;
     playerPlaceText.innerText = player.place;
-    playerLevelText.innerHTML = `Level ${player.level}; `
-    playerXpText.innerHTML = `XP: ${player.xp}/${player.xpRequired}`;
-    //charNameText.innerText = char.name;
-    //charPlaceText.innerText = char.place;
-    charLevelText.innerHTML = `Level ${char.level}; `
-    charXpText.innerHTML = `XP: ${char.xp}/${char.xpRequired}`;
+    playerLevelText.innerText = player.level;
+    playerXpText.innerText = `${player.xp}/${player.xpRequired}`;
+    playerCoinsText.innerText = player.coins;
+    playerHpText.innerText = `${player.hp}/${player.hpMax}`;
+
+    charNameText.innerText = char.name;
+    charPlaceText.innerText = char.place;
+    charLevelText.innerText = `${char.level}; `
+    charXpText.innerText = `${char.xp}/${char.xpRequired}`;
+    charCoinsText.innerText = char.coins;
+    charHpText.innerText = `${char.hp}/${char.hpMax}`;
 };
 
 function clearInput() {
@@ -337,7 +373,6 @@ function clearInput() {
 
 function update() {
     updateScreen();
-    //updateCharJob();
     updateLocalStorage();
     updateInfoText();
     clearInput();
@@ -488,10 +523,12 @@ function prepActivity() {
 /*************************************************************************************************/
 
 function startActivity() {
+    // Prevent player from starting activity without having selected a quest
     if (game.questState === "none" || game.questState === "finished") {
         updateMessage("player", "Select a quest for your character to complete!");
         updateMessage("char", "I wonder which quest I should choose...");
     }
+    // Start activity and quest timers
     else if (game.questState === "ready" || game.questState === "paused") {
         //if (game.questState === "ready") {
             activityButtons.innerHTML = `
@@ -504,7 +541,8 @@ function startActivity() {
             document.getElementById('resume-activity-btn').addEventListener("click", resumeActivity);
         //}
         timerStart();
-        console.log(game.questState)
+        player.questJobs.unshift(player.currentActivity);
+        
     }
 };
 
@@ -528,7 +566,7 @@ function pauseActivity() {
     updateTime();
     updateQuestStage();
     //console.log("quest time: ", char.currentQuest.time/60000);
-    console.log("Quest time: ", char.currentQuest.timeLeft/60000);
+    console.log("Quest time: ", char.currentQuest.time/60000);
 
     if (char.currentQuest.timeLeft <= 0) {
         console.log('runs?');
@@ -549,16 +587,25 @@ function resumeActivity () {
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+// Add current player activity to questJobs array, update previous activities list on screen
+function updateQuestJobs() {
+    
+};
+
+// 
 function submitActivity() {
     if (game.activityState != "paused") {
         pauseActivity();
     }
     
     updateMessage("player", "You completed an activity: congratulations!");
+    
     player.questJobs.unshift(player.currentActivity);
+    console.log('quest jobs length:' , player.questJobs.length);
     // Check if activities already added during quest
-    if (player.questJobs.length == 1) {
-        document.getElementById('finished-jobs').toggleAttribute('hidden');
+    
+    if (player.questJobs.length === 1) {
+        document.getElementById('finished-jobs').removeAttribute('hidden');
     }
     questJobsList.insertAdjacentHTML('afterbegin', `
         <li class="quest-job">${player.currentActivity.name} for ${Math.ceil(player.currentActivity.time/60000)} minutes</li>
@@ -571,7 +618,7 @@ function submitActivity() {
     }
     player.currentActivity = {};
     editActivity();
-
+    update();
 };
 
 
@@ -595,12 +642,13 @@ function checkQuestEligible(quest) {
 };
 
 function setQuestTimeLeft() {
-    char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
+    
 };
 
 function updateQuestStage() {
     const q = char.currentQuest;
-    // Check current quest stage not the last one
+    console.log(q.activeStage, q.stages[q.activeStage])
+    // Check current quest stage isn't the last one
     if (q.activeStage < q.stages.length - 1) {
         // Check if time is over next stage's start time
         if (q.time/60000 > q.stages[q.activeStage].end) {
@@ -616,7 +664,7 @@ function updateQuestStage() {
                 questContent.insertAdjacentHTML('beforeend', stagesHTML);
             }
             // Loop through stages adding to screen list and updating until correct stage reached
-            while (q.time/60000 > q.stages[q.activeStage].end) {
+            while (q.time/60000 > q.stages[q.activeStage].end && q.activeStage < q.stages.length - 1) {
                 const listHTML = `
                 <li id="previous-stage-item">${char.name} was ${q.stages[q.activeStage].text.toLowerCase()}</li>
                 `;
@@ -632,16 +680,38 @@ function updateQuestStage() {
 /*************************************************************************************************/
 
 function listQuests() {
+    resetQuest();
+    console.log(player.currentActivity);
+    /* if (game.questState === "finished") {
+        if (player.questJobs.length === 0) {
+            player.jobs.push(player.currentActivity);
+            player.currentActivity.time = 0;
+            player.currentActivity.timerStart = 0;
+        }
+        else {
+            player.currentActivity = {};
+        }
+    } */
+    if (game.activityState === "paused") {
+        console.log('really runs?');
+        submitActivity();
+        console.log(player.questJobs);
+    }
+    const newArray = [];
+    player.questJobs.forEach(element => {newArray.unshift(element)});
+    player.jobs.push.apply(newArray);
+    player.questJobs = [];
     questFinishedArea.setAttribute("hidden", true);
     game.questState ="none";
-    player.questJobs = [];
+    statusUpdate();
+
+    // Now starts the code to list quests...
     questContent.innerHTML = `
             <div class="choose-quest">
                 <div class="choose-quest-text"><span>Choose a quest from the list below:</span></div>
                 <div id="quest-list">
     `;
     quests.forEach(quest => {
-        //console.log("quest obj: ", quests[0]);
         if (checkQuestEligible(quest)) {
             document.getElementById('quest-list').insertAdjacentHTML('afterbegin', `
                 <div class="quest-item">
@@ -680,26 +750,27 @@ function listQuests() {
     `);
     
     game.availableQuests = document.querySelectorAll(".quest-item");
+    update();
     return;
 };
+
+// Reset various things ready for a new quest
+function resetQuest() {
+    char.currentQuest.time = 0;
+    char.currentQuest.timerStart = 0;
+    char.currentQuest.activeStage = 0;
+    char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
+    char.currentQuest = {};
+}
 
 /*************************************************************************************************/
 /*************************************************************************************************/
 
 function questFinished() {
     game.questState = "finished";
-    const newArray = [];
-    player.questJobs.forEach(element => {newArray.unshift(element)});
-    player.jobs.concat(newArray);
-    charJobs.unshift(char.currentQuest);
+    statusUpdate();
     
-    // Record quest completion
-    if (char.questsDone[char.currentQuest.id]) {
-        char.questsDone[char.currentQuest.id] += 1;
-    }
-    else {
-        char.questsDone[char.currentQuest.id] = 1;
-    }
+    
     
     // Update Quest box
     questFinishedArea.removeAttribute('hidden');
@@ -715,6 +786,7 @@ function questFinished() {
 /*************************************************************************************************/
 
 function showRewards() {
+    // Calculate player and character rewards
     player.xp += char.currentQuest.xpReward;
     char.xp += char.currentQuest.xpReward;
     player.coins += char.currentQuest.coinReward;
@@ -755,13 +827,20 @@ function showRewards() {
     `;
     document.getElementById('show-quests-btn').addEventListener("click", listQuests);
     
-    // Reset various things ready for a new quest
-    player.questJobs = [];
-    char.currentQuest.time = 0;
-    char.currentQuest.timerStart = 0;
-    char.currentQuest.activeStage = 0;
-    setQuestTimeLeft();
-    char.currentQuest = {};
+    
+    /* const newArray = [];
+    player.questJobs.forEach(element => {newArray.unshift(element)});
+    player.jobs.push.apply(newArray); */
+    
+
+    char.jobs.unshift(char.currentQuest);
+    // Add (or increment) record of this quest completion
+    if (char.questsDone[char.currentQuest.id]) {
+        char.questsDone[char.currentQuest.id] += 1;
+    }
+    else {
+        char.questsDone[char.currentQuest.id] = 1;
+    }
 
     update();
 };
