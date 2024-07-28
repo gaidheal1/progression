@@ -1,4 +1,4 @@
-html {
+* {
     box-sizing: border-box;
 }
 
@@ -8,6 +8,7 @@ body {
     /* min-width: 600px;
     max-width: 1000px; */
     width: 100vw;
+    height: 100vh;
     padding: 0;
     background: linear-gradient(#c1e1c1, #c1d1c1);
 }
@@ -16,10 +17,9 @@ main {
     margin: 0;
     /*background: linear-gradient(#e1c1e1);*/
     /*width: 100%;*/
-
+    /*height: 100%;*/
 }
 .navbox {
-
     background: linear-gradient(#d2d2d2, #e2e2e2);
     height: 50px;
     width: 100%;
@@ -30,6 +30,9 @@ main {
     margin: 0;
 }
 
+.nav-links-list li {
+    display: inline-block
+}
 h1 {
     margin: 0;
 }
