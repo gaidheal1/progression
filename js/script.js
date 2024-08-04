@@ -257,7 +257,7 @@ function charactersSetup() {
         char = defineChar();
     }
 	
-	if (char.currentQuest === {}) {
+	if (char.currentQuest.id === undefined) {
 		player.questJobs = [];
 		player.currentActivity = {};
 	};
