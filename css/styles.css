@@ -7,20 +7,20 @@ body {
     margin: 0 auto;
     /* min-width: 600px;
     max-width: 1000px; */
-    width: 100vw;
+    /* width: 100vw; */
     height: 100vh;
     padding: 0;
-    background: linear-gradient(#c1e1c1, #c1d1c1);
+    /* background: linear-gradient(#c1e1c1, #c1d1c1); */
 }
 main {
     padding: 0 10px;
     margin: 0;
-    /*background: linear-gradient(#e1c1e1);*/
+    /* background: linear-gradient(#e1c1e1); */
     /*width: 100%;*/
     /*height: 100%;*/
 }
 .navbox {
-    background: linear-gradient(#d2d2d2, #e2e2e2);
+    background: linear-gradient(#e1f9cf, #ddffc3);
     height: 50px;
     width: 100%;
     display: flex;
@@ -56,6 +56,7 @@ h2 {
     padding: 0;
     min-width: 600px;
     max-width: 1000px;
+    background-color: #b8f3c3;
 }
 
 .col {
@@ -113,10 +114,11 @@ h2 {
     margin-top: 5px;
 }
 
-/*
+
 .central-header {
+    text-align: center;
 }
-*/
+
 .most-recent {
     font-weight: bold;
 }
@@ -145,6 +147,9 @@ h2 {
     resize: vertical;
 }
 
+.activity-quest-headers {
+    font-size: 1.7rem;
+}
 
 .task-entry {
     margin-top: 10px;
@@ -159,7 +164,11 @@ h2 {
 
 #task-submit {
     margin-top: 5px;
-    width: 100px;
+    /* width: 100px; */
+}
+
+.previous-stages-header {
+    margin-top: 10px;
 }
 
 #activity-btns {
