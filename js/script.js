@@ -446,9 +446,14 @@ function charactersSetup() {
         char = defineChar();
     }
 	
+	// If current quest is empty, clear the player attributes in case saved in localstorage
 	if (char.currentQuest.id === undefined) {
 		player.questJobs = [];
 		player.currentActivity = {};
+	};
+	// In case localstorage data exists from previous version
+	if (char.role === undefined) {
+		char.role === "Scoundrel";
 	};
     return {player, char};
 };
