@@ -25,6 +25,8 @@ const playerHpText = document.getElementById('player-hp');
 
 const charNameText = document.getElementById('char-name');
 const charPlaceText = document.getElementById('char-place');
+const charRoleText = document.getElementById('char-role');
+
 const charXpText = document.getElementById('char-xp');
 const charLevelText = document.getElementById('char-level');
 const charCoinsText = document.getElementById('char-coins');
@@ -65,6 +67,8 @@ function definePlayer() {
         hpMax: 100,
         jobs : [],
         questJobs : [],
+        // Player doesn't do quests, character does; can delete.
+        // Unless implementing player quests later on...
         questsDone: {},
         currentActivity : {},
         status: "resting",
@@ -81,6 +85,7 @@ function defineChar() {
     return {
         name: name,
         place: place,
+        role: "Scoundrel",
         level: 1,
         xp: 0,
         xpRequired: 100,
@@ -88,7 +93,7 @@ function defineChar() {
         hp: 100,
         hpMax: 100,
         currentQuest: {},
-        questsDone: [],
+        questsDone: {},
         jobs: [],
         status: "resting",
     };
@@ -129,6 +134,11 @@ const quests = [
         timerStart: 0,
         timeLeft: 0,
         activeStage: 0,
+        canRepeat: true,
+        results: [],
+        needsQuest: [
+            {id:2, minimum:1},
+        ],
     },
     {
         id: 1,
@@ -153,6 +163,9 @@ const quests = [
         timerStart: 0,
         timeLeft: 0,
         activeStage: 0,
+        canRepeat: true,
+        results: [],
+        needsQuest: [],
     },
     {
         id: 2,
@@ -170,15 +183,192 @@ const quests = [
             },
         ],
         levelMin: 0,
-        levelMax: 10,
+        levelMax: 20,
         coinReward: 15,
         xpReward: 40,
         time: 0,
         timerStart: 0,
         timeLeft: 0,
         activeStage: 0,
+        canRepeat: true,
+        results: [],
+        needsQuest: [],
+    },
+    {
+        id: 3,
+        title: "Looking for a job (Storyline quest)",
+        description: "Hopefully you can find someone to teach you a useful trade",
+        totalLength: 25,
+        stages: [
+            {
+                text: "Loitering around various shops",
+                end: 5,
+            },
+            {
+                text: "Getting chased away from various shops",
+                end: 7,
+            },
+            {
+                text: "Following the blacksmith around on her errands",
+                end: 18,
+            },
+            {
+                text: "Getting threatened by the blacksmith",
+                end: 20,
+            },
+            {
+                text: "Sneaking around behind the blacksmith's shop",
+                end: 25,
+            },
+            
+        ],
+        levelMin: 2,
+        levelMax: 20,
+        coinReward: 0,
+        xpReward: 80,
+        time: 0,
+        timerStart: 0,
+        timeLeft: 0,
+        activeStage: 0,
+        canRepeat: false,
+        results: [],
+        needsQuest: [],
+    },
+    {
+        id: 4,
+        title: "Finding a job (Storyline quest)",
+        description: "The blacksmith finds you loitering behind her shop! You're in trouble now...",
+        totalLength: 25,
+        stages: [
+            {
+                text: "Getting caught by the blacksmith",
+                end: 2,
+            },
+            {
+                text: "Getting hauled through the streets by the ear",
+                end: 6,
+            },
+            {
+                text: "Being confirmed as a good-for-nothing layabout by people in the town square",
+                end: 10,
+            },
+            {
+                text: "Getting taken back and into the blacksmith's lair :O",
+                end: 14,
+            },
+            {
+                text: "Being forced to make your mark on a crude apprentice's contract. 'I need an apprentice. You'll do', she says.",
+                end: 16,
+            },
+            {
+                text: "Being scrubbed clean by the blacksmith",
+                end: 21,
+            },
+            {
+                text: "Being fed and watered by the blacksmith, who gruffly introduces herself: 'Amice'. ",
+                end: 25,
+            },
+            
+        ],
+        levelMin: 2,
+        levelMax: 20,
+        coinReward: 0,
+        xpReward: 80,
+        time: 0,
+        timerStart: 0,
+        timeLeft: 0,
+        activeStage: 0,
+        canRepeat: false,
+        results: [
+            {
+				name: "Become blacksmith",
+				message: "You are now a blacksmith's apprentice!",
+				key: "role",
+				change: "Blacksmith's apprentice",
+			},
+        ],
+        needsQuest: [
+            {id: 3, minimum: 1}
+        ],
+    },
+    {
+        id: 5,
+        title: "Work them bellows kid (Trade quest)",
+        description: "Now you're an apprentice, you're still miserable, but at least you know how miserable you'll be for at least the next year.",
+        totalLength: 20,
+        stages: [
+            {
+                text: "Getting shouted at. The blacksmith yells 'bellows!'. Almost bellows the word, you could say.",
+                end: 2,
+            },
+            {
+                text: "Hauling on the bellows, never quite managing the precision Amice demands.",
+                end: 18,
+            },
+            {
+                text: "Gasping for breath and breathing furnace-hot air. Amice says 'go' and you flop limply out the room for a jug of ale, knowing you'll hear the call again in a matter of minutes.",
+                end: 20,
+            },
+        ],
+        levelMin: 2,
+        levelMax: 20,
+        coinReward: 0,
+        xpReward: 60,
+        time: 0,
+        timerStart: 0,
+        timeLeft: 0,
+        activeStage: 0,
+        canRepeat: true,
+        results: [],
+        needsQuest: [
+            {id: 4, minimum: 1}
+        ],
+    },
+    {
+        id: 6,
+        title: "Fetch coke (Trade quest)",
+        description: "Amice knits her eyebrows at you as you half collapse in the baking forge room. She drags you to the fuel store, and making sure you're wathing, scoops five scoops of coke into a sack and returns to the forge.",
+        totalLength: 5,
+        stages: [
+            {
+                text: "Taking a sack to the coke store.",
+                end: 1,
+            },
+            {
+                text: "Piling five scoops of coke into the sack and dragging it to the forge.",
+                end: 4,
+            },
+            {
+                text: "Getting yelled at for bringing the wrong amount of fuel, in the wrong way, in the wrong time (too slow, of course, never fast enough).",
+                end: 5,
+            },
+        ],
+        levelMin: 3,
+        levelMax: 20,
+        coinReward: 0,
+        xpReward: 20,
+        time: 0,
+        timerStart: 0,
+        timeLeft: 0,
+        activeStage: 0,
+        canRepeat: true,
+        results: [],
+        needsQuest: [
+            {id: 5, minimum: 10}
+        ],
     },
 ];
+
+// Create object of keys (quest id) and values ('quests' index)
+function getQuestIndexArray() {
+	const findQuestIds = quests.map((x) => x.id);
+
+	let findQuestIndex = {};
+	for (let i = 0; i < findQuestIds.length; i++) {
+		findQuestIndex[findQuestIds[i]] = i;
+	};
+	return findQuestIndex;
+};
 
 const characterJobs = [
     {
@@ -247,7 +437,6 @@ function charactersSetup() {
         player = definePlayer();
     }
 	
-	
 	// Fetch character from localstorage
     charRetreival = JSON.parse(localStorage.getItem("char"));
     if (charRetreival !== null) {
@@ -265,6 +454,7 @@ function charactersSetup() {
 };
 
 const {player, char} = charactersSetup();
+const findQuestIndex = getQuestIndexArray();
 
 // Login streak checker WIP
 /* function checkLogin() {
@@ -371,6 +561,7 @@ function updateInfoText() {
 
     charNameText.innerText = char.name;
     charPlaceText.innerText = char.place;
+    charRoleText.innerText = char.role.toLowerCase();
     charLevelText.innerText = `${char.level}; `
     charXpText.innerText = `${char.xp}/${char.xpRequired}`;
     charCoinsText.innerText = char.coins;
@@ -661,13 +852,40 @@ function submitActivity() {
 
 // List of tests for eligible quests
 function checkQuestEligible(quest) {
-    if (quest.levelMin > player.level ||
-        quest.levelMax < player.level
-    ) {return false}
-    else {return true}
+    let eligible = true;
+    console.log('Quest: ', quest.title);
+    //console.log('questsDone: ', char.questsDone);
+    // Check if quest is repeatable and if so if character has already done it
+    if (quest.canRepeat === false) {
+        if (char.questsDone[quest.id] >= 1) {
+            eligible = false;
+        };
+    };
+    
+    // Loop through list of prerequisite quests
+    // Quests that SHOULD be ineligible are getting through this section somehow..
+    console.log('needsQuest: ', quest.needsQuest);
+    console.log('char questsDone: ', char.questsDone);
+    quest.needsQuest.forEach(req => {
+        const needed = quests[findQuestIndex[req.id]];
+        console.log('quest needed title/id: ', needed.id,needed.title);
+        console.log(char.questsDone[needed.id]);
+        
+        if (char.questsDone[needed.id] < req.minimum || char.questsDone[needed.id] === undefined) {
+            console.log(`Quest ${quest.title} needs quest ${needed.title} before doing this one!`);
+            eligible = false;
+        }
+        else {
+            console.log('done that prerequisite quest!');
+        }
+    });
+    
+    // Simple comparison checks
+    if (player.level < quest.levelMin ||
+        player.level > quest.levelMax
+    ) {eligible = false}
+    return eligible;
 };
-
-
 
 function updateQuestStage() {
     const q = char.currentQuest;
@@ -715,9 +933,10 @@ function resetQuest() {
 }
 
 function listQuests() {
-	
-	// This should run every time except the first time through
-    
+    // Testing for new quest requirements
+	//console.log('char quests: ', char.questsDone[2]>3);
+	console.log('How many time does this run?')
+    // This should run every time except the first time through
 	if (game.questState === "finished") {
         resetQuest();
 		if (player.questJobs.length === 0) {
@@ -779,7 +998,10 @@ function listQuests() {
 				//console.log("start quest: current quest obj: ", char.currentQuest);
                 statusUpdate();
             });
-        };
+        }
+        else {
+            console.log(`listQuests: ${quest.title} didn't make it`);
+        }
     });
     questContent.insertAdjacentHTML('beforeend', `
         </div>
@@ -850,13 +1072,22 @@ function showRewards() {
             ${char.name} finished the quest! You both get ${char.currentQuest.xpReward}xp and ${char.currentQuest.coinReward} coins.
         </div>`;
 
-    document.getElementById('quest-results').innerHTML = rewardHTML;
+    // Make change for each quest result
+    let resultHTML = ``;
+	char.currentQuest.results.forEach(result => {
+		resultHTML += `<div class="result-item">${result.message}</div>`;
+		char[result.key] = result.change;
+	});
+    if (resultHTML != ``) {
+        resultHTML = `<div class="result-text">${resultHTML}</div>`
+    };
+    document.getElementById('quest-results').innerHTML = rewardHTML + resultHTML;
     document.getElementById('finished-btn-container').innerHTML = `
         <button id="show-quests-btn">Show quests</button>
     `;
     document.getElementById('show-quests-btn').addEventListener("click", listQuests);
     
-    
+
     // If player clicks 'show rewards' without submitting paused activity:
 	if (game.activityState === "paused") {
         //console.log('really runs?');
@@ -865,6 +1096,7 @@ function showRewards() {
         //console.log(player.questJobs);    
 	};
     char.jobs.unshift(char.currentQuest);
+
     // Add (or increment) record of this quest completion
     if (char.questsDone[char.currentQuest.id]) {
         char.questsDone[char.currentQuest.id] += 1;
