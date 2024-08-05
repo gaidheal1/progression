@@ -902,7 +902,7 @@ function updateQuestStage() {
             if (q.activeStage === 0) {
                 const stagesHTML = `
                 <div id="previous-stages" class="previous-stages-header">
-                <h3>Previously</h3>
+                <h4>Previous quest stages</h4>
                 </div>
                 <ul id="previous-stages-list" class="previous-stages-list">
 
