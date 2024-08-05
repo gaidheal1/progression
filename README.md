@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Need a boost to start or finish some work? This game is the first (that I’ve heard of) to present the Player and the Character as two separate entities. 
+Need a boost to start or finish some work? Want to game _and_ get stuff done in the real world? This game is the first (that I’ve heard of) to present the Player and the Character as two separate entities. 
 
 ### Player
 
@@ -16,6 +16,7 @@ The Character takes quests and follows stories, as you guide them on their path 
 
 Multiple game elements are involved, all aimed at increasing the Player's enjoyment and thus the likelihood they’ll return.
 
+- Gameplay
 - Direct rewards (XP and levelling)
 - Compelling stories (Player enjoys Character’s questing experience vicariously)
 - Body doubling (Player and Character both work together simultaneously)
