@@ -484,17 +484,15 @@ function checkLoginStreak() {
 
 	let diffMs = now - player.lastLogin;
 	let fourDaysMs = 1000 * 60 * 60 * 24 * 4;
+	let nowDate = now.getDate();
+	let nowMonth = now.getMonth();	
+	let dateDiff = nowDate - lastLoginDate;
 
 	if (diffMs < fourDaysMs) {
 		const lastLoginDate = player.lastLogin.getDate();
 		const lastLoginMonth = player.lastLogin.getMonth();
 		const lastLoginYear = player.lastLogin.getFullYear();
-		
-		let nowDate = now.getDate();
-		let nowMonth = now.getMonth();
-		
-		let dateDiff = nowDate - lastLoginDate
-				
+			
 		if (dateDiff === 0) {
 			// First streak check: already logged in today?
 			playerMessage = "Welcome back! You last logged in earlier today.";
