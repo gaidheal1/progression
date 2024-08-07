@@ -482,17 +482,14 @@ function checkLoginStreak() {
 	// Declare array of days in months
 	const monthDays = [31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-	let diffMs = now - player.lastLogin;
-	let fourDaysMs = 1000 * 60 * 60 * 24 * 4;
-	let nowDate = now.getDate();
-	let nowMonth = now.getMonth();	
+	const diffMs = now - player.lastLogin;
+	const fourDaysMs = 1000 * 60 * 60 * 24 * 4;
+	const nowDate = now.getDate();
+	const lastLoginDate = player.lastLogin.getDate();
+	
 	let dateDiff = nowDate - lastLoginDate;
 
-	if (diffMs < fourDaysMs) {
-		const lastLoginDate = player.lastLogin.getDate();
-		const lastLoginMonth = player.lastLogin.getMonth();
-		const lastLoginYear = player.lastLogin.getFullYear();
-			
+	if (diffMs < fourDaysMs) {			
 		if (dateDiff === 0) {
 			// First streak check: already logged in today?
 			playerMessage = "Welcome back! You last logged in earlier today.";
@@ -500,6 +497,9 @@ function checkLoginStreak() {
 		else {
 			//console.log("Checking whether we go back into previous month");
 			if (dateDiff < 0) {
+				const nowMonth = now.getMonth();	
+				const lastLoginMonth = player.lastLogin.getMonth();
+				const lastLoginYear = player.lastLogin.getFullYear();
 				// Previous month
 				if (nowYear - lastLoginYear === 0) {
 					// Last login was previous year
