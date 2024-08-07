@@ -452,7 +452,7 @@ function charactersSetup() {
 	};
 	// In case localstorage data exists from previous version
 	if (char.role === undefined) {
-		char.role === "Scoundrel";
+		char.role = "Scoundrel";
 	};
     return {player, char};
 };
