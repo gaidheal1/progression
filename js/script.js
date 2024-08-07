@@ -425,7 +425,6 @@ function charactersSetup() {
     let player = {};
     let char = {};
     
-    updateMessage("player", "Welcome back!");
     updateMessage("char", "I'm glad you're here.");
     
 	// Fetch player from local storage
@@ -461,25 +460,86 @@ function charactersSetup() {
 const {player, char} = charactersSetup();
 const findQuestIndex = getQuestIndexArray();
 
-// Login streak checker WIP
-/* function checkLogin() {
-    const now = new Date();
-    const nowDate = now.getDate();
-    const nowMonth = now.getMonth();
-    const nowYear = now.getFullYear();
-    console.log(now);
+// Login streak checker 
+function checkLoginStreak() {
+	let playerMessage = "";
+	if (player.lastLogin === undefined) {
+		playerMessage = "The beginning of a new login streak!";
+		player.lastLogin = new Date();
+		player.lastLogin = 1;
+		return;
+	}
+	else if (player.lastLogin === "") {
+		playerMessage = "Welcome to Progression!";
+	};
+	
+	let now = new Date("March 1, 2024 12:00:00");
+	
+	// Calculate leap year
+	const nowYear = now.getFullYear();
+	const isLeap = year => new Date(year, 1, 29).getDate() === 29;
 
-    if (player.lastLogin !== "string") {
-        // Last logged in earlier today
-        if (player.lastLogin.toLocaleDateString() === now.toLocaleDateString()) {
-            updateMessage("player", "Welcome back! You last logged in earlier today.")
-        }
-        // Last logged in yesterday
-        else if ()
-    }
-    player.lastLogin = new Date();
-}
-checkLogin(); */
+	// Declare array of days in months
+	const monthDays = [31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+	let diffMs = now - player.lastLogin;
+	let fourDaysMs = 1000 * 60 * 60 * 24 * 4;
+
+	if (diffMs < fourDaysMs) {
+		const lastLoginDate = player.lastLogin.getDate();
+		const lastLoginMonth = player.lastLogin.getMonth();
+		const lastLoginYear = player.lastLogin.getFullYear();
+		
+		let nowDate = now.getDate();
+		let nowMonth = now.getMonth();
+		
+		let dateDiff = nowDate - lastLoginDate
+				
+		if (dateDiff === 0) {
+			// First streak check: already logged in today?
+			playerMessage = "Welcome back! You last logged in earlier today.";
+		}
+		else {
+			//console.log("Checking whether we go back into previous month");
+			if (dateDiff < 0) {
+				// Previous month
+				if (nowYear - lastLoginYear === 0) {
+					// Last login was previous year
+					// Update nowDate to make subtraction possible
+					nowDate += monthDays[lastLoginMonth];
+				}
+				else {
+					// Last login was previous year
+					// Update nowDate to make subtraction possible
+					nowDate += monthDays[11];
+				}
+			}
+			dateDiff = nowDate - lastLoginDate;
+			
+			// Second streak check
+			if (dateDiff === 1) {
+				// Player logged in yesterday
+				player.loginStreak += 1;
+				playerMessage = `Welcome back! First login today: you increased your streak to ${player.loginStreak}!`;
+			}
+			else {
+				// Player logged in before yesterday
+				player.loginStreak = 1;
+				playerMessage = `Welcome back! You last logged in ${dateDiff} days ago. Login streak reset!`;
+			}
+		}
+	}
+	else {
+		// Player last logged in > 4 days ago
+		player.loginStreak = 1;
+		playerMessage = `Welcome back! You last logged in ${dateDiff} days ago. Login streak reset!`;
+	};
+	// Update player login
+	player.lastLogin = now;
+	return playerMessage;
+};
+
+updatePlayerMessage("player", checkLoginStreak());
 update();
 listQuests();
 
