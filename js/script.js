@@ -539,7 +539,7 @@ function checkLoginStreak() {
 	return playerMessage;
 };
 
-updatePlayerMessage("player", checkLoginStreak());
+updateMessage("player", checkLoginStreak());
 update();
 listQuests();
 
