@@ -73,7 +73,7 @@ function definePlayer() {
         currentActivity : {},
         status: "resting",
         lastLogin: "",
-        loginStreak: 0,
+        loginStreak: 1,
     };
 };
 //const player = definePlayer();
@@ -454,6 +454,10 @@ function charactersSetup() {
 	if (char.role === undefined) {
 		char.role = "Scoundrel";
 	};
+	if (player.lastLogin === undefined) {
+		player.lastLogin = new Date();
+		player.lastLogin = 1;
+	}
     return {player, char};
 };
 
@@ -463,12 +467,7 @@ const findQuestIndex = getQuestIndexArray();
 // Login streak checker 
 function checkLoginStreak() {
 	let playerMessage = "";
-	if (player.lastLogin === undefined) {
-		player.lastLogin = new Date();
-		player.lastLogin = 1;
-		return "Welcome to Progression!";
-	}
-	else if (player.lastLogin === "") {
+	if (player.lastLogin === "") {
 		return "Welcome to Progression!";
 	};
 	
