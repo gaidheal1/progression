@@ -464,13 +464,12 @@ const findQuestIndex = getQuestIndexArray();
 function checkLoginStreak() {
 	let playerMessage = "";
 	if (player.lastLogin === undefined) {
-		playerMessage = "The beginning of a new login streak!";
 		player.lastLogin = new Date();
 		player.lastLogin = 1;
-		return;
+		return "Welcome to Progression!";
 	}
 	else if (player.lastLogin === "") {
-		playerMessage = "Welcome to Progression!";
+		return "Welcome to Progression!";
 	};
 	
 	let now = new Date("March 1, 2024 12:00:00");
