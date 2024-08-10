@@ -20,127 +20,118 @@
                 </span>
             </div>
         </nav>
-        <main>
-            <div class="container" id="top-bar">
-                <div class="col left">
-                    
-                    <div class="info">
-                        <span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
-                        <span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn">Edit</button></span>
-                    </div>
-                    <div class="info">
-                        <span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
-                    </div>
-                    <div class="info">
-                        <span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
-                    </div>
-                </div>
+        <main class="container-fluid justify-content">
+            <div >
+				<div class="row justify-content" id="top-bar">
+					<div class="col-sm-6  bg-light border ">
+						
+						
+							<div class="info">
+								<span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
+								<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="btn btn-info">Edit</button></span>
+							</div>
+							<div class="info">
+								<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
+							</div>
+							<div class="info">
+								<span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
+							</div>
+					</div>
 
-                <div class="col right">
-                    <div class="info">
-                        <span id="char-name" class="name">Arthur</span> of <span id="char-place" class="place">Lancelot</span> is a <span id="char-role" class="role">scoundrel</span>
-                    </div>
-                    <div class="info">
-                        <span class="level">Level <span id="char-level">1</span>; <span class="xp">XP: <span id="char-xp">0/100</span></span>
-                    </div>
-                    <div class="info">
-                        <span class="coins"><span id="char-coins">0</span> coins; </span><span class="hp">HP: <span id="char-hp"></span></span>
-                    </div>
-                </div>
+					<div class="col-sm-6 bg-light border">
+						<div class="info">
+							<span id="char-name" class="name">Arthur</span> of <span id="char-place" class="place">Lancelot</span> is a <span id="char-role" class="role">scoundrel</span>
+						</div>
+						<div class="info">
+							<span class="level">Level <span id="char-level">1</span>; <span class="xp">XP: <span id="char-xp">0/100</span></span>
+						</div>
+						<div class="info">
+							<span class="coins"><span id="char-coins">0</span> coins; </span><span class="hp">HP: <span id="char-hp"></span></span>
+						</div>
+					</div>
 
-            </div>
+				</div>
 
-            <div class="container">
-                <div class="col left">
-                    <div class="central-header"><h2>Player (you)</h2></div>
-                </div>
-                <div class="col right">
-                    <div class="central-header"><h2>Character</h2></div>
-                </div>
-            </div>
+				<div class="row" id="quests">
+					<div class="col-sm-6 border">
+						<h3 class="activity-quest-headers">Player Activity</h3>
+						<div id="activity-content">
+							<div id="activity-status">No activity running</div>
+							<div id="task" class="task-entry-container">
+								<label for="task-name" id="task-entry-label" class="task-entry">What are you going to work on?</label>    
+								<textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" maxlength="80" minlength="4"></textarea>
+							</div>
+							<div id="activity-btns">
+								<button type="button" id="task-submit" class="btn btn-info task-entry">Enter activity</button>
+							</div>
+							<div id="finished-jobs" hidden="true">
+								<div id="previous-activities" class="previous-activities-header">
+									<h3>Previous activities</h3>
+								</div>
+								<ul id="quest-jobs-list" class="quest-jobs-list">
 
-            <div class="container" id="quests">
-                <div class="col left">
-                    <h2 class="activity-quest-headers">Activity</h2>
-                    <div id="activity-content">
-                        <div id="activity-status">No activity running</div>
-                        <div id="task" class="task-entry-container">
-                            <label for="task-name" id="task-entry-label" class="task-entry">What are you going to work on?</label>    
-                            <textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" maxlength="80" minlength="4"></textarea>
-                        </div>
-                        <div id="activity-btns">
-                            <button type="button" id="task-submit" class="task-entry">Enter activity</button>
-                        </div>
-                        <div id="finished-jobs" hidden="true">
-                            <div id="previous-activities" class="previous-activities-header">
-                                <h3>Previous activities</h3>
-                            </div>
-                            <ul id="quest-jobs-list" class="quest-jobs-list">
+								</ul>
+							</div>
+						</div>
 
-                            </ul>
-                        </div>
-                    </div>
+					</div>
+					<div class="col-sm-6 border">
+						<h3 class="activity-quest-headers">Character Quest</h3>
+						<div id="quest-status">No quest running</div>
+						<div id="quest-content">
+							<span>No quest selected.</span>
+						</div>
+						<div id="quest-finished" hidden="true">
+							<div id="quest-results-header" class="quest-results-header">
+								<h3>Quest finished!</h3>
+							</div>
+							<div id="quest-results" class="quest-results">
+							</div>
+							<div id="finished-btn-container">        
+							</div>
+						</div>
+						
+					</div>
+				</div>
 
-                </div>
-                <div class="col right">
-                    <h2 class="activity-quest-headers">Quest</h2>
-                    <div id="quest-status">No quest running</div>
-                    <div id="quest-content">
-                        <span>No quest selected.</span>
-                    </div>
-                    <div id="quest-finished" hidden="true">
-                        <div id="quest-results-header" class="quest-results-header">
-                            <h3>Quest finished!</h3>
-                        </div>
-                        <div id="quest-results" class="quest-results">
-                        </div>
-                        <div id="finished-btn-container">        
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="container">
-                <div class="central-header"><h2>Messages</h2></div>
-            </div>
-            
-            <div class="container" id="game-messages">
-                <div class="col left">
-                    <div class="task-display">
-                        <ul id="player-messages">
-                            <span>No messages yet!</span>
-                        </ul>
-                    </div>
-                </div>
-                    
-                <div class="col right">
-                    <div class="task-display">
-                        <ul id="char-messages">
-                            <span>No messages yet!</span>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container">
-                <div class="central-header"><h2>All completed tasks</h2></div>
-            </div>
-
-            <div class="container" id="all-completed">
-                <div class="col left">
-                    <div id="player-all" class="task-display">
-                        <span>No tasks completed yet!</span>
-                    </div>
-                </div>
-                    
-                <div class="col right">
-                    <div id="character-all" class="task-display">
-                        <span>No tasks completed yet!</span>
-                    </div>
-                    
-                </div>
-            </div>
+				<div class="row" id="game-messages">
+					<div class="col-sm-6 border bg-light">
+						<h3 class="text-center">Player Messages</h3>
+						<div class="task-display">
+							<ul id="player-messages">
+								<span>No messages yet!</span>
+							</ul>
+						</div>
+					</div>
+						
+					<div class="col-sm-6 border bg-light">
+						<div class="task-display">
+						<h3 class="text-center">Character Messages</h3>
+							<ul id="char-messages">
+								<span>No messages yet!</span>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row" id="all-completed">
+					<div class="col-sm-6 border bg-light">
+					<h3 class="text-center">All Player Activities</h3>
+						<div id="player-all" class="task-display">
+							<span>No tasks completed yet!</span>
+						</div>
+					</div>
+						
+					<div class="col-sm-6 border bg-light">
+					<h3 class="text-center">All Character Quests</h3>
+						<div id="character-all" class="task-display">
+						
+							<span>No tasks completed yet!</span>
+						</div>
+						
+					</div>
+				</div>
+			</div>
             <script src="js/script.js"></script>
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
