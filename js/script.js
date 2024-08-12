@@ -85,6 +85,9 @@ class Timer {
     }
 };
 
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 class Item {
     constructor(id, name, description, maxStack, iconURL, effects = []) {
         this.id = id;
@@ -137,6 +140,9 @@ class Buff {
         };
     }
 };
+
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 class InventorySlot {
     constructor(slot) {
@@ -299,6 +305,9 @@ class Inventory {
 	
 };
 
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 class Quest {
 	constructor(id, title = "", description = "", stages = [], totalLength = 0, levelMin = 0, levelMax = 0,	canRepeat = true, 
 		rewards = {}, needsQuest = [], time = 0, timerStart = 0, timeLeft = 0, activeStage = 0) {
@@ -326,7 +335,38 @@ class Quest {
         this.activeStage += 1;
         document.getElementById('previous-stages-list').insertAdjacentHTML('afterbegin', listHTML);
     }
+
+    checkEligible() {
+        let eligible = true;
+
+        if (this.canRepeat === false) {
+            if (char.questsDone[this.id] >= 1) {
+                eligible = false;
+            };
+        };
+
+        // Loop through list of prerequisite quests
+        this.needsQuest.forEach(req => {
+            const needed = quests[findQuestIndex[req.id]];
+            if (char.questsDone[needed.id] < req.minimum || char.questsDone[needed.id] === undefined) {
+                //console.log(`Quest ${this.title} needs quest ${needed.title} before doing this one!`);
+                eligible = false;
+            }
+            else {
+                //console.log('done that prerequisite quest!');
+            }
+        });
+        
+        // Simple comparison checks
+        if (player.level < this.levelMin ||
+            player.level > this.levelMax
+        ) {eligible = false}
+        return eligible;
+    }
 };
+
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 class Person {
 	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}) {
@@ -934,50 +974,7 @@ function updateMessage(charOrPlayer = "", string = "") {
 };
 
 
-/***********************************************************************************************************/
-/***********************************************************************************************************/
-/***********************************************************************************************************/
-/**********************************                                       **********************************/
-/**********************************             TIMER FUNCTIONS           **********************************/
-/**********************************                                       **********************************/
-/***********************************************************************************************************/
-/***********************************************************************************************************/
-/***********************************************************************************************************/
 
-// Probably won't need this function after full timer implementation
-/* function timerStart() {
-    game.activityState = "active";
-    player.currentActivity.timerStart = Date.now();
-    game.questState = "active";
-    char.currentQuest.timerStart = Date.now();
-    statusUpdate();
-}; */
-
-// Probably won't need this function after full timer implementation
-/* function setQuestTimeLeft() {
-    char.currentQuest.timeLeft = (char.currentQuest.totalLength * 60000) - char.currentQuest.time;
-}; */
-
-// Probably won't need this function after full timer implementation
-/* function updateQuestTimeLeft() {
-    if (char.currentQuest.timeLeft > 0) {
-        setQuestTimeLeft();
-        if (char.currentQuest.timeLeft <= 0) {
-            char.currentQuest.timeLeft = 0;
-        }
-    }
-}; */
-
-// May not need this function at all after full timer implementation
-/* function timerStop() {
-    game.activityState = "paused";
-    game.questState = "paused";
-    const now = Date.now();
-    player.currentActivity.time += now - player.currentActivity.timerStart;
-    char.currentQuest.time += now - char.currentQuest.timerStart;
-    updateQuestTimeLeft();
-    statusUpdate();
-}; */
 
 
 /***********************************************************************************************************/
@@ -1194,49 +1191,13 @@ function submitActivity() {
 /*          **********  *******     *************************************************************************/
 
 
-// List of tests for eligible quests
-function checkQuestEligible(quest) {
-    let eligible = true;
-    //console.log('Quest: ', quest.title);
-    
-    // Check if quest is repeatable and if so if character has already done it
-    if (quest.canRepeat === false) {
-        if (char.questsDone[quest.id] >= 1) {
-            eligible = false;
-        };
-    };
-    
-    // Loop through list of prerequisite quests
-    quest.needsQuest.forEach(req => {
-        const needed = quests[findQuestIndex[req.id]];
-        if (char.questsDone[needed.id] < req.minimum || char.questsDone[needed.id] === undefined) {
-            //console.log(`Quest ${quest.title} needs quest ${needed.title} before doing this one!`);
-            eligible = false;
-        }
-        else {
-            //console.log('done that prerequisite quest!');
-        }
-    });
-    
-    // Simple comparison checks
-    if (player.level < quest.levelMin ||
-        player.level > quest.levelMax
-    ) {eligible = false}
-    return eligible;
-};
-
-
-
-/*************************************************************************************************/
-/*************************************************************************************************/
 
 // Reset various things ready for a new quest
 function resetQuest() {
 	// This makes use of mutation
-    char.currentQuest.time = 0;
-    char.currentQuest.timerStart = 0;
+    
     char.currentQuest.activeStage = 0;
-    char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
+    //char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
     char.currentQuest = {};
 	questJobsList.innerHTML = "";
 }
@@ -1274,7 +1235,7 @@ function listQuests() {
                 <div id="quest-list">
     `;
     quests.forEach(quest => {
-        if (checkQuestEligible(quest)) {
+        if (quest.checkEligible()) {
             document.getElementById('quest-list').insertAdjacentHTML('afterbegin', `
                 <div class="quest-item">
                     <div ><button id="quest-${quest.id}"  class="btn btn-info"> ${quest.title}: ${quest.totalLength} minutes</button></div>
