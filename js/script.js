@@ -9,6 +9,82 @@
 /***********************************************************************************************************/
 
 
+class Timer {
+    constructor(elementId, countUp = true, countdownFrom = 0) {
+      this.element = document.getElementById(elementId);
+      this.countUp = countUp;
+      this.countdownFrom = countdownFrom;
+      this.intervalId = null;
+      this.time = countUp ? 0 : countdownFrom;
+      this.startTime = 0;
+      this.isRunning = false;
+    }
+    start(duration) {
+        if (this.isRunning) return;
+        if (!this.countUp) console.log("hi")
+        this.isRunning = true;
+        this.startTime = Date.now();
+        this.time = duration;
+        console.log("countup: ", this.countUp, ", this.time: ", this.time);
+    
+        game.activityState = "active";
+        game.questState = "active";
+        statusUpdate();
+
+        this.intervalId = setInterval(() => {
+            const elapsedTime = Date.now() - this.startTime;
+            const time = this.countUp ? this.time + elapsedTime : this.time - elapsedTime;
+            this.display(time);
+            
+            console.log("time: ", time);
+            if (!this.countUp) {
+                if (this.countdownFrom - this.time > char.currentQuest.stages[char.currentQuest.activeStage].end) {
+                    char.currentQuest.updateStage();
+                }
+                if (time <= 0) {
+                    this.stop();
+                    this.display(0);
+                    pauseActivity();
+                    questFinished();
+                    document.getElementById('resume-activity-btn').setAttribute("disabled", true);
+                }
+            }
+        }, 1000);
+      }
+    
+    stop() {
+        if (!this.isRunning) return;
+
+        clearInterval(this.intervalId);
+        this.isRunning = false;
+        console.log("countup: ", this.countUp, ", this.time: ", this.time);
+        this.time = this.countUp ? Date.now() - this.startTime : this.time - (Date.now() - this.startTime);
+
+        game.activityState = "paused";
+        game.questState = "paused";
+        statusUpdate();
+    }
+    
+    reset() {
+        this.stop();
+        this.time = 0;
+        this.display(0);
+    }
+    display(time) {
+        const days = Math.floor(time / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+        let displayString = '';
+        if (days > 0) displayString += `${days}d `;
+        if (hours > 0 || days > 0) displayString += `${hours.toString().padStart(2, '0')}:`;
+        displayString += `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        this.element.textContent = displayString;
+    }
+};
+
 class Item {
     constructor(id, name, description, maxStack, iconURL, effects = []) {
         this.id = id;
@@ -231,15 +307,24 @@ class Quest {
 			this.description = description;
 			this.totalLength = totalLength;
 			this.stages = stages;
+            this.stages.forEach(stage => {stage.end = stage.end * 60000})
 			this.levelMin = levelMin;
 			this.levelMax = levelMax;
-			this.time = time;
-			this.timerStart = timerStart;
-			this.timeLeft = timeLeft;
+            // Turning minutes into milliseconds
+			this.time = time * 60000;
+			//this.timerStart = timerStart;
+			//this.timeLeft = timeLeft;
 			this.activeStage = activeStage;
 			this.canRepeat = canRepeat;
 			this.rewards = rewards;
 			this.needsQuest = needsQuest;
+    }
+    updateStage(stage = this.activeStage) {
+        const listHTML = `
+            <li id="previous-stage-item">${char.name} was ${this.stages[stage].text.toLowerCase()}</li>
+            `;
+        this.activeStage += 1;
+        document.getElementById('previous-stages-list').insertAdjacentHTML('afterbegin', listHTML);
     }
 };
 
@@ -604,6 +689,7 @@ function charactersSetup() {
     let player = {};
     let char = {};
     
+
     updateMessage("player", "Welcome back!");
     updateMessage("char", "I'm glad you're here.");
     
@@ -651,6 +737,11 @@ const items = [
     new Item(0, "apple", "Just an apple, really", 5, "/img/apple-icon.svg", [effect1]),
     new Item(1, "stick", "Only a stick, chico", 10, "/img/stick-icon.svg"),
 ];
+
+// Initialize timers
+const countdownTimer = new Timer('countdownTimer', false);
+const countUpTimer = new Timer('countUpTimer');
+
 // Testing inventory adding
 
 console.log(player.inventory.show());
@@ -853,29 +944,32 @@ function updateMessage(charOrPlayer = "", string = "") {
 /***********************************************************************************************************/
 /***********************************************************************************************************/
 
-
-function timerStart() {
+// Probably won't need this function after full timer implementation
+/* function timerStart() {
     game.activityState = "active";
     player.currentActivity.timerStart = Date.now();
     game.questState = "active";
     char.currentQuest.timerStart = Date.now();
     statusUpdate();
-};
+}; */
 
-function setQuestTimeLeft() {
+// Probably won't need this function after full timer implementation
+/* function setQuestTimeLeft() {
     char.currentQuest.timeLeft = (char.currentQuest.totalLength * 60000) - char.currentQuest.time;
-};
+}; */
 
-function updateQuestTimeLeft() {
+// Probably won't need this function after full timer implementation
+/* function updateQuestTimeLeft() {
     if (char.currentQuest.timeLeft > 0) {
         setQuestTimeLeft();
         if (char.currentQuest.timeLeft <= 0) {
             char.currentQuest.timeLeft = 0;
         }
     }
-};
+}; */
 
-function timerStop() {
+// May not need this function at all after full timer implementation
+/* function timerStop() {
     game.activityState = "paused";
     game.questState = "paused";
     const now = Date.now();
@@ -883,7 +977,7 @@ function timerStop() {
     char.currentQuest.time += now - char.currentQuest.timerStart;
     updateQuestTimeLeft();
     statusUpdate();
-};
+}; */
 
 
 /***********************************************************************************************************/
@@ -938,12 +1032,11 @@ function prepActivity() {
             id : Date.now(),
             name : taskName.value,
             time : 0,
-            timerStart: 0,
+            // timerStart: 0,
         };
         document.getElementById('task').innerHTML = `
                 <div id="task-messages">
                     <div class="current-task-msg">You are doing this: <span id="current-task" class="current-task">${taskName.value}</span></div>
-                    <div class="current-task-msg">You have been working for <span id="current-time" class="current-time">0</span> minutes</div>
                 </div>
         `;
         activityButtons.innerHTML = `
@@ -988,9 +1081,10 @@ function startActivity() {
             document.getElementById('pause-activity-btn').addEventListener("click", pauseActivity);
             document.getElementById('resume-activity-btn').addEventListener("click", resumeActivity);
         //}
-        timerStart();
-		// Why is this here? Surely it should only be in 'submitQuest' func...
-        //player.questJobs.unshift(player.currentActivity);
+        //timerStart();
+		
+        countUpTimer.start(countUpTimer.time);
+        countdownTimer.start(countdownTimer.time);
         
     }
 };
@@ -998,29 +1092,35 @@ function startActivity() {
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-function updateTime() {
+/* function updateTime() {
     document.getElementById('current-time').innerText = Math.floor(player.currentActivity.time/60000);
 
     if (char.currentQuest.timeLeft == 0) {
         document.getElementById('quest-time-left').innerText = 0;    
     }
     document.getElementById('quest-time-left').innerText = Math.ceil(char.currentQuest.timeLeft/60000);
-};
+}; */
 
 function pauseActivity() {
     const pauseButton = document.getElementById('pause-activity-btn');
     pauseButton.setAttribute("disabled", true);
     
-    timerStop();
-    updateTime();
-    updateQuestStage();
+    //timerStop();
+
+    // Methods of new Timer class 
+    countUpTimer.stop();
+    countdownTimer.stop();
+
+
+    //updateTime();
+    //updateQuestStage();
     // Leave running for testing
     console.log("Quest time: ", char.currentQuest.time/60000);
 
     if (char.currentQuest.timeLeft <= 0) {
-        //console.log('runs?');
-        questFinished();
-        document.getElementById('resume-activity-btn').setAttribute("disabled", true);
+        // Not sure this is necessary now
+        
+        
     }
     else {
         document.getElementById('resume-activity-btn').removeAttribute("disabled");
@@ -1028,7 +1128,11 @@ function pauseActivity() {
 };
 
 function resumeActivity () {
-    timerStart();
+    //timerStart();
+
+    countUpTimer.start(countUpTimer.time);
+    countdownTimer.start(countdownTimer.time); 
+
     document.getElementById('resume-activity-btn').setAttribute("disabled", true);
     document.getElementById('pause-activity-btn').removeAttribute("disabled");
 };
@@ -1048,9 +1152,14 @@ function submitActivity() {
     }
     updateMessage("player", "You completed an activity: congratulations!");
     
+    // Adding new timer functionality
+    player.currentActivity.time = countUpTimer.time;
+
+
 	// Add player current activity to list of quest activities
     player.questJobs.unshift(player.currentActivity);
 
+    
     
 	// If this is first activity submitted during quest , show the list of previous activities
 	if (player.questJobs.length === 1) {
@@ -1065,6 +1174,7 @@ function submitActivity() {
 	updateMessage("char", "I wish I could continue this quest...");
 
     player.currentActivity = {};
+    countUpTimer.reset();
 	
     // Change activity screen to new activity entry
 	editActivity();
@@ -1115,36 +1225,7 @@ function checkQuestEligible(quest) {
     return eligible;
 };
 
-function updateQuestStage() {
-    const q = char.currentQuest;
-    //console.log(q.activeStage, q.stages[q.activeStage])
-    // Check current quest stage isn't the last one
-    if (q.activeStage < q.stages.length - 1) {
-        // Check if time is over next stage's start time
-        if (q.time/60000 > q.stages[q.activeStage].end) {
-            if (q.activeStage === 0) {
-                const stagesHTML = `
-                <div id="previous-stages" class="previous-stages-header">
-                <h4>Previous quest stages</h4>
-                </div>
-                <ul id="previous-stages-list" class="previous-stages-list">
 
-                </ul>
-                `;
-                questContent.insertAdjacentHTML('beforeend', stagesHTML);
-            }
-            // Loop through stages adding to screen list and updating until correct stage reached
-            while (q.time/60000 > q.stages[q.activeStage].end && q.activeStage < q.stages.length - 1) {
-                const listHTML = `
-                <li id="previous-stage-item">${char.name} was ${q.stages[q.activeStage].text.toLowerCase()}</li>
-                `;
-                q.activeStage += 1;
-                document.getElementById('previous-stages-list').insertAdjacentHTML('afterbegin', listHTML);
-            }
-            document.getElementById('quest-stage-text').innerText = q.stages[q.activeStage].text.toLowerCase();
-        }
-    }
-};
 
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -1162,8 +1243,7 @@ function resetQuest() {
 
 function listQuests() {
     // Testing for new quest requirements
-	//console.log('char quests: ', char.questsDone[2]>3);
-	//console.log('How many time does this run?')
+	
     // This should run every time except the first time through
 	if (game.questState === "finished") {
         resetQuest();
@@ -1185,6 +1265,7 @@ function listQuests() {
 		statusUpdate();
     };
     document.getElementById('finished-jobs').setAttribute('hidden', true);
+    document.getElementById("previous-stages").setAttribute("hidden", true);
     
     // Now starts the code to list quests...
     questContent.innerHTML = `
@@ -1204,26 +1285,27 @@ function listQuests() {
             document.getElementById(`quest-${quest.id}`).addEventListener("click", () => {
                 game.questState = "ready";
                 char.currentQuest = quest;
-                // Set quest time remaining in milliseconds
-				// Function currently empty!
-                setQuestTimeLeft();
-                //console.log('quest stage text: ', char.currentQuest.stages[0].text)
+                
+                countdownTimer.reset();
+                countdownTimer.countdownFrom = quest.totalLength * 60 * 1000;
+                countdownTimer.time = countdownTimer.countdownFrom;
+                
                 questContent.innerHTML = `
                     <div class="quest-title">Title: ${char.currentQuest.title}</div>
-                    <div>Time left: <span id="quest-time-left">${char.currentQuest.totalLength}</span> minutes</div>
                     <div class="quest-stage">${char.name} is <span id="quest-stage-text">${char.currentQuest.stages[0].text.toLowerCase()}</span></div>
                 `;
+                
+                document.getElementById("previous-stages").removeAttribute("hidden");
+                
                 if (game.activityState === "paused") {
                     document.getElementById('resume-activity-btn').removeAttribute("disabled");
-                }
-                else if (game.activityState === "none") {
+                } else if (game.activityState === "none") {
                     updateMessage("player", "Now add an activity and you're good to go!");
-                }
-                else if (game.activityState === "ready") {
+                } else if (game.activityState === "ready") {
                     updateMessage("player", "Hit start to get going!");
                     document.getElementById('start-activity-btn').removeAttribute("disabled");
                 } 
-				//console.log("start quest: current quest obj: ", char.currentQuest);
+				
                 statusUpdate();
             });
         }
@@ -1249,6 +1331,9 @@ function listQuests() {
 // Basically updates quest state and adds 'show rewards' button
 function questFinished() {
     game.questState = "finished";
+    // Put text from final stage onto screen list
+    char.currentQuest.updateStage(char.currentQuest.stages.length - 1);
+    document.getElementById('quest-stage-text').innerText = "finished";
     statusUpdate();
         
     // Update Quest box

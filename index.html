@@ -78,6 +78,7 @@
 				<div class="row" id="quests">
 					<div class="col-sm-6 border">
 						<h3 class="activity-quest-headers">Player Activity</h3>
+						<div class="mb-3 timer"><strong>Your activity timer: <span id="countUpTimer">00:00</span></strong></div>
 						<div id="activity-content">
 							<div id="activity-status">No activity running</div>
 							<div id="task" class="task-entry-container">
@@ -100,9 +101,15 @@
 					</div>
 					<div class="col-sm-6 border">
 						<h3 class="activity-quest-headers">Character Quest</h3>
+						<div class="mb-3 timer"><strong>Quest time left: <span id="countdownTimer">00:00</span></strong></div>
 						<div id="quest-status">No quest running</div>
 						<div id="quest-content">
 							<span>No quest selected.</span>
+						</div>
+						<div id="previous-stages" class="previous-stages-header" hidden="true">
+							<h4>Previous quest stages</h4>
+							<ul id="previous-stages-list" class="previous-stages-list">
+							</ul>
 						</div>
 						<div id="quest-finished" hidden="true">
 							<div id="quest-results-header" class="quest-results-header">
