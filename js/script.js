@@ -244,18 +244,19 @@ class Quest {
 };
 
 class Person {
-	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, coins = 0, hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}) {
+	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}) {
 		this.name = name;
 		this.place = place;
 		this.level = level;
 		this.xp = xp;
 		this.xpRequired = xpRequired;
+        this.xpModifier = xpModifier;
 		this.coins = coins;
 		this.hp = hp;
 		this.hpMax = hpMax;
 		this.jobs = jobs;
 		this.effects = effects;
-		
+
 		this.attributeFunctions = {
 			hp : this.changeHp,
 			hpMax : this.changeHpMax
@@ -309,9 +310,9 @@ class Person {
 };
 
 class Player extends Person {
-    constructor(name = "Anon", place = "Balham", level = 0, xp = 0, xpRequired = 100, coins = 0, 
+    constructor(name = "Anon", place = "Balham", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, 
 		hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}, lastLogin = {}, loginStreak = 0, questJobs = [], currentActivity = {}) {
-        super(name, place, level, xp, xpRequired, coins, hp, hpMax, jobs, effects, inventory);
+        super(name, place, level, xp, xpRequired, xpModifier, coins, hp, hpMax, jobs, effects, inventory);
         this.questJobs = questJobs;
         this.currentActivity = currentActivity;
         this.lastLogin = lastLogin;
@@ -320,11 +321,13 @@ class Player extends Person {
 };
 
 class Char extends Person {
-	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, coins = 0, 
+	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, 
 		hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}, role = "", currentQuest = {}, questsDone = []) {
+
 		name = name === "" ? characterNames[Math.floor(Math.random() * characterNames.length)] : name;
 		place = place === "" ? placeNames[Math.floor(Math.random() * placeNames.length)] : place
-		super(name, place, level, xp, xpRequired, coins, hp, hpMax, jobs, effects, inventory);
+
+		super(name, place, level, xp, xpRequired, xpModifier, coins, hp, hpMax, jobs, effects, inventory);
 		this.role = "Scoundrel";
 		this.currentQuest = currentQuest;
 		this.questsDone = questsDone;
@@ -609,7 +612,7 @@ function charactersSetup() {
     if (playerRetreival !== null) {
         player = playerRetreival;
 		// Create Player object with localstorage data
-		player = new Player(player.name, player.place, player.level, player.xp, player.xpRequired, 
+		player = new Player(player.name, player.place, player.level, player.xp, player.xpRequired, player.xpModifier,
 			player.coins, player.hp, player.hpMax, player.jobs, player.effects, player.inventory,
 			player.lastLogin, player.loginStreak, player.questJobs, player.currentActivity);
 		}
@@ -622,7 +625,7 @@ function charactersSetup() {
     if (charRetreival !== null) {
          char = charRetreival;
 		// Create Char object with localstorage data
-		char = new Char(char.name, char.place, char.level, char.xp, char.xpRequired, 
+		char = new Char(char.name, char.place, char.level, char.xp, char.xpRequired,  char.xpModifier,
 			char.coins, char.hp, char.hpMax, char.jobs, char.effects, char.inventory,
 			char.role, char.currentQuest, char.questsDone);
     }

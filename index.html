@@ -22,23 +22,46 @@
         </nav>
         <main class="container-fluid justify-content">
             <div >
-				<div class="row justify-content" id="top-bar">
+				<div class="row gx-500" id="top-bar">
 					<div class="col-sm-6  bg-light border ">
 						
-						
-							<div class="info">
-								<span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
-								<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="btn btn-info">Edit</button></span>
+						<div class="row">
+							<div class="col" id="player-info">
+								<div class="info">
+									<span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
+									<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="btn btn-info">Edit</button></span>
+								</div>
+								<div class="info">
+									<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
+								</div>
+								<div class="info">
+									<span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
+								</div>
 							</div>
-							<div class="info">
-								<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
+							
+							<div class="col ">
+								<!-- <div class="container mt-5">  -->
+									<p class="text-center"><strong>Inventory</strong></p>
+									<div class="inventory mb-1">
+										<div class="inventory-slot">
+											<img src="https://www.pngrepo.com/png/43158/180/apple.png" alt="Image 1">
+										</div>
+										<div class="inventory-slot">
+											<img src="https://www.pngrepo.com/png/107459/180/chicken.png" alt="Image 2">
+										</div>
+										<div class="inventory-slot">
+											<img src="https://www.pngrepo.com/png/224514/180/sword.png" alt="Image 3">
+										</div>
+										<div class="inventory-slot">
+											<img src="https://www.pngrepo.com/png/398419/180/sunrise.png" alt="Image 4">
+										</div>
+									</div>
+								<!-- </div>  -->
 							</div>
-							<div class="info">
-								<span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
-							</div>
+						</div>
 					</div>
 
-					<div class="col-sm-6 bg-light border">
+					<div class="col bg-light border">
 						<div class="info">
 							<span id="char-name" class="name">Arthur</span> of <span id="char-place" class="place">Lancelot</span> is a <span id="char-role" class="role">scoundrel</span>
 						</div>
