@@ -1,0 +1,21 @@
+:root {
+    --button-text-font-family: "Roboto", Helvetica;
+    --button-text-font-weight: 500;
+    --button-text-font-size: 20px;
+    --button-text-letter-spacing: 0px;
+    --button-text-line-height: normal;
+    --button-text-font-style: normal;
+    --text-24-font-family: "Roboto", Helvetica;
+    --text-24-font-weight: 500;
+    --text-24-font-size: 24px;
+    --text-24-letter-spacing: 0px;
+    --text-24-line-height: normal;
+    --text-24-font-style: normal;
+    --text-16-font-family: "Roboto", Helvetica;
+    --text-16-font-weight: 500;
+    --text-16-font-size: 16px;
+    --text-16-letter-spacing: 0px;
+    --text-16-line-height: normal;
+    --text-16-font-style: normal;
+  }
+  
