@@ -6,11 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="assets/styles/styles.css">
     </head>
     <body>
         <nav>
-            <div class="navbox">
+            <!-- <div class="navbar">
                 <span class="nav-title"><h1>Progression</h1></span>
                 <span class="nav-links">
                     <ul class="nav-links-list">
@@ -18,78 +18,109 @@
                         <li><a href="https://gaidheal1.github.io" target="_blank">Blog</a></li>
                     </ul>
                 </span>
-            </div>
+            </div> -->
+			<div class="navbar">
+				<div class="left-links">
+				  <div class="button-comp">
+					<div class="button-style-comp"><button class="button">Progress RPG</button></div>
+				  </div>
+				  <div class="link"><div class="text-wrapper">Stats</div></div>
+				  <div class="link"><div class="text-wrapper">Manage</div></div>
+				  <div class="link"><div class="text-wrapper">Achievements</div></div>
+				  <div class="link"><div class="text-wrapper">Link 1</div></div>
+				</div>
+				<div class="right-links">
+				  <div class="div-wrapper"><div class="div">Log out</div></div>
+				  <div class="account">
+					<div class="button-comp">
+					  <!-- <img class="arrow-icon" src="img/arrow-icon.svg" /> -->
+					  <div class="button-style-comp"><button class="button">Account</button></div>
+					</div>
+				  </div>
+				</div>
+			  </div>
         </nav>
-        <main class="container-fluid justify-content">
-            <div >
-				<div class="row gx-500" id="top-bar">
-					<div class="col-sm-6  bg-light border ">
-						
-						<div class="row">
-							<div class="col" id="player-info">
-								<div class="info">
-									<span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
-									<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="btn btn-info">Edit</button></span>
-								</div>
-								<div class="info">
-									<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
-								</div>
-								<div class="info">
-									<span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
+        <main>
+			<div class="content-comp">
+				<div class="desktop-info-comp">
+					<div class="single-info-comp">
+						<div class="top-bar">
+							<div class="info-left">
+								<span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
+								<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="btn btn-info">Edit</button></span>
+								<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
+							</div>
+							<div class="info-right">
+								<span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
+							</div>
+						</div>
+					</div>
+			
+							<!-- <div class="col ">
+								
+								<p class="text-center"><strong>Inventory</strong></p>
+								<div class="inventory mb-1">
+									<div class="inventory-slot">
+										<img src="https://www.pngrepo.com/png/43158/180/apple.png" alt="Image 1">
+									</div>
+									<div class="inventory-slot">
+										<img src="https://www.pngrepo.com/png/107459/180/chicken.png" alt="Image 2">
+									</div>
+									<div class="inventory-slot">
+										<img src="https://www.pngrepo.com/png/224514/180/sword.png" alt="Image 3">
+									</div>
+									<div class="inventory-slot">
+										<img src="https://www.pngrepo.com/png/398419/180/sunrise.png" alt="Image 4">
+									</div> 
+								</div> -->
+								
+							<!-- </div>
+						</div> -->
+					
+			
+					<div class="single-info-comp">
+						<div class="top-bar">
+							<div class="info-left">
+								<span id="char-name" class="name">Arthur</span> of <span id="char-place" class="place">Lancelot</span> is a <span id="char-role" class="role">scoundrel</span>
+								<span class="level">Level <span id="char-level">1</span>; <span class="xp">XP: <span id="char-xp">0/100</span></span>
+							</div>
+							<div class="info-right">
+								<span class="coins"><span id="char-coins">0</span> coins; </span><span class="hp">HP: <span id="char-hp"></span></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			
+
+				<div class="workspace" id="quests">
+					<div class="workspace-content">
+						<div class="timer-controls">
+
+							<div id="status-line">
+								<div class="status-container">
+									<span id="activity-status" class="status">Activity running</span>
 								</div>
 							</div>
 							
-							<div class="col ">
-								<!-- <div class="container mt-5">  -->
-									<p class="text-center"><strong>Inventory</strong></p>
-									<div class="inventory mb-1">
-										<div class="inventory-slot">
-											<img src="https://www.pngrepo.com/png/43158/180/apple.png" alt="Image 1">
-										</div>
-										<div class="inventory-slot">
-											<img src="https://www.pngrepo.com/png/107459/180/chicken.png" alt="Image 2">
-										</div>
-										<div class="inventory-slot">
-											<img src="https://www.pngrepo.com/png/224514/180/sword.png" alt="Image 3">
-										</div>
-										<div class="inventory-slot">
-											<img src="https://www.pngrepo.com/png/398419/180/sunrise.png" alt="Image 4">
-										</div>
-									</div>
-								<!-- </div>  -->
+							<div class="timer">
+								<span id="countUpTimer" class="timer-text">00:00</span>
 							</div>
-						</div>
-					</div>
-
-					<div class="col bg-light border">
-						<div class="info">
-							<span id="char-name" class="name">Arthur</span> of <span id="char-place" class="place">Lancelot</span> is a <span id="char-role" class="role">scoundrel</span>
-						</div>
-						<div class="info">
-							<span class="level">Level <span id="char-level">1</span>; <span class="xp">XP: <span id="char-xp">0/100</span></span>
-						</div>
-						<div class="info">
-							<span class="coins"><span id="char-coins">0</span> coins; </span><span class="hp">HP: <span id="char-hp"></span></span>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="row" id="quests">
-					<div class="col-sm-6 border">
-						<h3 class="activity-quest-headers">Player Activity</h3>
-						<div class="mb-3 timer"><strong>Your activity timer: <span id="countUpTimer">00:00</span></strong></div>
-						<div id="activity-content">
-							<div id="activity-status">No activity running</div>
+							
+							
 							<div id="task" class="task-entry-container">
-								<label for="task-name" id="task-entry-label" class="task-entry">What are you going to work on?</label>    
+								<label for="task-name" id="task-entry-label" class="tex-entry">What are you going to work on?</label>    
 								<textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" maxlength="80" minlength="4"></textarea>
 							</div>
 							<div id="activity-btns">
 								<button type="button" id="task-submit" class="btn btn-info task-entry">Enter activity</button>
 							</div>
+
+						</div>
+						<div class="list-frame">
+
 							<div id="finished-jobs" hidden="true">
-								<div id="previous-activities" class="previous-activities-header">
+								<div id="previous-activities" class="header">
 									<h3>Previous activities</h3>
 								</div>
 								<ul id="quest-jobs-list" class="quest-jobs-list">
@@ -97,35 +128,55 @@
 								</ul>
 							</div>
 						</div>
-
 					</div>
-					<div class="col-sm-6 border">
-						<h3 class="activity-quest-headers">Character Quest</h3>
-						<div class="mb-3 timer"><strong>Quest time left: <span id="countdownTimer">00:00</span></strong></div>
-						<div id="quest-status">No quest running</div>
-						<div id="quest-content">
-							<span>No quest selected.</span>
-						</div>
-						<div id="previous-stages" class="previous-stages-header" hidden="true">
-							<h4>Previous quest stages</h4>
-							<ul id="previous-stages-list" class="previous-stages-list">
-							</ul>
-						</div>
-						<div id="quest-finished" hidden="true">
-							<div id="quest-results-header" class="quest-results-header">
-								<h3>Quest finished!</h3>
+
+					<div class="workspace-content">
+						<div class="timer-controls">
+														
+							
+							<div id="status-line">
+								<div class="status-container">
+									<span id="quest-status" class="status">Quest running</span>
+								</div>
 							</div>
-							<div id="quest-results" class="quest-results">
+
+							<div class="timer">
+								<span id="countdownTimer" class="timer-text">00:00</span>
 							</div>
-							<div id="finished-btn-container">        
+
+							<div id="quest-content">
+								<span>No quest selected.</span>
 							</div>
-						</div>
 						
+						<!-- Button trigger modal 
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+							Launch demo modal
+						</button> -->
+						
+						
+						</div>
+						<div class="list-frame">
+							<div id="previous-stages" class="previous-stages-header" hidden="true">
+								<h4>Previous quest stages</h4>
+								<ul id="previous-stages-list" class="previous-stages-list">
+								</ul>
+							</div>
+							<div id="quest-finished" hidden="true">
+								<div id="quest-results-header" class="quest-results-header">
+									<h3>Quest finished!</h3>
+								</div>
+								<div id="quest-results" class="quest-results">
+								</div>
+								<div id="finished-btn-container">        
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
-				<div class="row" id="game-messages">
-					<div class="col-sm-6 border bg-light">
+				<div class="workspace" id="game-messages">
+
+					<div class="workspace-content">
 						<h3 class="text-center">Player Messages</h3>
 						<div class="task-display">
 							<ul id="player-messages">
@@ -134,7 +185,7 @@
 						</div>
 					</div>
 						
-					<div class="col-sm-6 border bg-light">
+					<div class="workspace-content">
 						<div class="task-display">
 						<h3 class="text-center">Character Messages</h3>
 							<ul id="char-messages">
@@ -144,7 +195,7 @@
 					</div>
 				</div>
 				
-				<div class="row" id="all-completed">
+				<!-- <div class="row" id="all-completed">
 					<div class="col-sm-6 border bg-light">
 					<h3 class="text-center">All Player Activities</h3>
 						<div id="player-all" class="task-display">
@@ -160,12 +211,111 @@
 						</div>
 						
 					</div>
-				</div>
+				</div> -->
 			</div>
             <script src="js/script.js"></script>
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        </main>
+        
+			<!-- Modal
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body">
+					...
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+				</div>
+			</div> -->
+
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog  model-lg" role="document">
+			<div class="quest-comp modal-content">
+				<div class="header-text modal-header"><div class="text-wrapper modal-title">Quests</div></div>
+				<div class="quests modal-body">
+				  <div class="list-pane">
+					<div class="list-headers">
+					  <button class="button"><div class="div">Daily</div></button>
+					  <button class="button"><div class="div">General</div></button>
+					</div>
+					<div class="list">
+					  <div class="quest-list-component">
+						<p>Thing 1 - Aliquam ac dolor vel eros condimentum</p>
+						<div class="list-item-time">25 minutes</div>
+					  </div>
+					  <div class="quest-list-component-2">
+						<p >Thing 1 - Aliquam ac dolor vel eros condimentum</p>
+						<div class="list-item-time-2">25 minutes</div>
+					  </div>
+					  <div class="quest-list-component-2">
+						<p >Thing 1 - Aliquam ac dolor vel eros condimentum</p>
+						<div class="list-item-time-2">25 minutes</div>
+					  </div>
+					  <div class="quest-list-component-3">
+						<p>Thing 1 - Aliquam ac dolor vel eros condimentum</p>
+						<div class="list-item-time-3">25 minutes</div>
+					  </div>
+					</div>
+				  </div>
+				  <div class="quest-description">
+					<div class="quest-header">
+					  <div class="div-wrapper-2"><div class="div">Quest title</div></div>
+					  <div class="div-wrapper-2"><div class="div">Quest length</div></div>
+					</div>
+					<!-- <img class="line" src="img/line-1.svg" /> -->
+					<div class="quest-description-2">
+					  <p class="text-wrapper-3">
+						Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer
+						euismod eget sem nec tincidunt. Vivamus porta arcu in ligula imperdiet, vitae dignissim metus molestie.
+						Sed at lectus venenatis orci condimentum imperdiet. Duis aliquet mauris non interdum interdum. Sed vitae
+						varius diam. Suspendisse viverra eros a sapien blandit, nec ultrices ante pharetra. Vivamus congue eros
+						non eros eleifend blandit. Curabitur nulla ex, viverra in justo at, ultricies venenatis ipsum.
+					  </p>
+					  <div class="bottom-quest-frame">
+						<div class="rewards">
+						  <p class="rewards-XP-gained">Rewards<br />XP gained: 500<br />Coins gained: 10</p>
+						</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  </div>
+			  </div>
+
+		</main>
+		<footer>
+			<div class="name-and-copyright">
+				<div class="text-wrapper-4">Progress RPG</div>
+				<div class="text-wrapper-5">Copyright information</div>
+			</div>
+			<div class="app-info">
+				<div class="footer-section">
+				  <div class="heading"><div class="text-wrapper-6">Heading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				</div>
+				<div class="footer-section">
+				  <div class="heading"><div class="text-wrapper-6">Heading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				</div>
+			</div>
+		</footer>
     </body>
 </html>
