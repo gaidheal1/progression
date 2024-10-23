@@ -520,6 +520,7 @@ let game = {
 };
 
 
+
 const quests = [
 	new Quest(0, "Kill rats", "There are some rats in the field we're trying to farm. If you kill them, we can get back to work. Please help!",
 		// Quest stages
@@ -729,8 +730,6 @@ function charactersSetup() {
     let player = {};
     let char = {};
     
-
-    updateMessage("player", "Welcome back!");
     updateMessage("char", "I'm glad you're here.");
     
 	// Fetch player from local storage
@@ -746,6 +745,10 @@ function charactersSetup() {
         // Player hasn't got anything in localstorage
         player = new Player();
     }
+	
+	// Converting player's last login into Date object
+	player.lastLogin = new Date(player.lastLogin);
+
 	// Fetch character from localstorage
     charRetreival = JSON.parse(localStorage.getItem("char"));
     if (charRetreival !== null) {
@@ -765,8 +768,12 @@ function charactersSetup() {
 	};
 	// In case localstorage data exists from previous version
 	if (char.role === undefined) {
-		char.role === "Scoundrel";
+		char.role = "Scoundrel";
 	};
+	if (player.lastLogin === undefined) {
+		player.lastLogin = new Date();
+		player.lastLogin = 1;
+	}
     return {player, char};
 };
 
@@ -810,35 +817,81 @@ console.log(char.inventory.show());
 update();
 const findQuestIndex = getQuestIndexArray();
 
+// Login streak checker 
+function checkLoginStreak() {
+	const now = new Date();
+	let playerMessage = "";
+	if (player.lastLogin === "") {
+		player.lastLogin = new Date();
+		return "Welcome to Progression!";
+	}
+	else {
+		// Calculate leap year
+		const nowYear = now.getFullYear();
+		const isLeap = year => new Date(year, 1, 29).getDate() === 29;
 
+		// Declare array of days in months
+		const monthDays = [31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
+		const diffMs = now - player.lastLogin;
+		const fourDaysMs = 1000 * 60 * 60 * 24 * 4;
+		const nowDate = now.getDate();
+		
+		const lastLoginDate = player.lastLogin.getDate();
+		
+		let dateDiff = nowDate - lastLoginDate;
 
+		if (diffMs < fourDaysMs) {			
+			if (dateDiff === 0) {
+				// First streak check: already logged in today?
+				playerMessage = "Welcome back! You last logged in earlier today.";
+			}
+			else {
+				//console.log("Checking whether we go back into previous month");
+				if (dateDiff < 0) {
+					const nowMonth = now.getMonth();	
+					const lastLoginMonth = player.lastLogin.getMonth();
+					const lastLoginYear = player.lastLogin.getFullYear();
+					// Previous month
+					if (nowYear - lastLoginYear === 0) {
+						// Last login was previous year
+						// Update nowDate to make subtraction possible
+						nowDate += monthDays[lastLoginMonth];
+					}
+					else {
+						// Last login was previous year
+						// Update nowDate to make subtraction possible
+						nowDate += monthDays[11];
+					}
+				}
+				dateDiff = nowDate - lastLoginDate;
+				
+				// Second streak check
+				if (dateDiff === 1) {
+					// Player logged in yesterday
+					player.loginStreak += 1;
+					playerMessage = `Welcome back! First login today: you increased your streak to ${player.loginStreak}!`;
+				}
+				else {
+					// Player logged in before yesterday
+					player.loginStreak = 1;
+					playerMessage = `Welcome back! You last logged in ${dateDiff} days ago. Login streak reset!`;
+				}
+			}
+		}
+		else {
+			// Player last logged in > 4 days ago
+			player.loginStreak = 1;
+			playerMessage = `Welcome back! You last logged in ${dateDiff} days ago. Login streak reset!`;
+		};
+		// Update player login
+		player.lastLogin = now;
+		return playerMessage;
+	};
+};
 
+updateMessage("player", checkLoginStreak());
 
-
-
-
-
-
-// Login streak checker WIP
-/* function checkLogin() {
-    const now = new Date();
-    const nowDate = now.getDate();
-    const nowMonth = now.getMonth();
-    const nowYear = now.getFullYear();
-    console.log(now);
-
-    if (player.lastLogin !== "string") {
-        // Last logged in earlier today
-        if (player.lastLogin.toLocaleDateString() === now.toLocaleDateString()) {
-            updateMessage("player", "Welcome back! You last logged in earlier today.")
-        }
-        // Last logged in yesterday
-        else if ()
-    }
-    player.lastLogin = new Date();
-}
-checkLogin(); */
 update();
 listQuests();
 
@@ -884,7 +937,7 @@ function statusUpdate() {
     questStatus.innerText = "Quest " + makeStatusText(game.questState);
 };
 
-function updateScreen() {
+function updateJobs() {
     let playerHTML = ``;
     if (player.jobs.length > 0) {
         player.jobs.forEach(job => {
@@ -905,13 +958,6 @@ function updateScreen() {
 };
 
 function updateLocalStorage() {
-    /*
-    const data = [player, char]
-    localStorage.setItem("data", JSON.stringify(data));
-    */
-    //const data1 = player;
-    //console.log(player);
-	
     localStorage.setItem("player", JSON.stringify(player));
     localStorage.setItem("char", JSON.stringify(char));
 };
@@ -933,15 +979,17 @@ function updateInfoText() {
     charHpText.innerText = `${char.hp}/${char.hpMax}`;
 };
 
+/*
 function clearInput() {
-    //document.getElementById('task-name').value = "";
+    document.getElementById('task-name').value = "";
 };
+*/
 
 function update() {
-    updateScreen();
+    updateJobs();
     updateLocalStorage();
     updateInfoText();
-    clearInput();
+    //clearInput();
 };
 
 /*************************************************************************************************/
