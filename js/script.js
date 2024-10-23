@@ -892,7 +892,7 @@ function updateScreen() {
             </div>`
         });
     };
-    allPlayer.innerHTML = playerHTML;
+    // allPlayer.innerHTML = playerHTML;
 
     let charHTML = ``
     if (char.jobs.length > 0) {
@@ -901,7 +901,7 @@ function updateScreen() {
             </div>`
         });
     };
-    allCharacter.innerHTML = charHTML;
+    // allCharacter.innerHTML = charHTML;
 };
 
 function updateLocalStorage() {
