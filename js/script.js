@@ -2,6 +2,468 @@
 /***********************************************************************************************************/
 /***********************************************************************************************************/
 /**********************************                                       **********************************/
+/**********************************           CLASS DEFINITIONS           **********************************/
+/**********************************                                       **********************************/
+/***********************************************************************************************************/
+/***********************************************************************************************************/
+/***********************************************************************************************************/
+
+
+class Timer {
+    constructor(elementId, countUp = true, countdownFrom = 0) {
+      this.element = document.getElementById(elementId);
+      this.countUp = countUp;
+      this.countdownFrom = countdownFrom;
+      this.intervalId = null;
+      this.time = countUp ? 0 : countdownFrom;
+      this.startTime = 0;
+      this.isRunning = false;
+    }
+    start(duration) {
+        if (this.isRunning) return;
+        if (!this.countUp) console.log("hi")
+        this.isRunning = true;
+        this.startTime = Date.now();
+        this.time = duration;
+        console.log("countup: ", this.countUp, ", this.time: ", this.time);
+    
+        game.activityState = "active";
+        game.questState = "active";
+        statusUpdate();
+
+        this.intervalId = setInterval(() => {
+            const elapsedTime = Date.now() - this.startTime;
+            const time = this.countUp ? this.time + elapsedTime : this.time - elapsedTime;
+            this.display(time);
+            
+            console.log("time: ", time);
+            if (!this.countUp) {
+                if (this.countdownFrom - this.time > char.currentQuest.stages[char.currentQuest.activeStage].end) {
+                    char.currentQuest.updateStage();
+                }
+                if (time <= 0) {
+                    this.stop();
+                    this.display(0);
+                    pauseActivity();
+                    questFinished();
+                    document.getElementById('resume-activity-btn').setAttribute("disabled", true);
+                }
+            }
+        }, 1000);
+      }
+    
+    stop() {
+        if (!this.isRunning) return;
+
+        clearInterval(this.intervalId);
+        this.isRunning = false;
+        console.log("countup: ", this.countUp, ", this.time: ", this.time);
+        this.time = this.countUp ? Date.now() - this.startTime : this.time - (Date.now() - this.startTime);
+
+        game.activityState = "paused";
+        game.questState = "paused";
+        statusUpdate();
+    }
+    
+    reset() {
+        this.stop();
+        this.time = 0;
+        this.display(0);
+    }
+    display(time) {
+        const days = Math.floor(time / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+        let displayString = '';
+        if (days > 0) displayString += `${days}d `;
+        if (hours > 0 || days > 0) displayString += `${hours.toString().padStart(2, '0')}:`;
+        displayString += `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        this.element.textContent = displayString;
+    }
+};
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+class Item {
+    constructor(id, name, description, maxStack, iconURL, effects = []) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.maxStack = maxStack;
+        this.iconURL = iconURL;
+        this.effects = effects;
+    }
+};
+
+class Effect {
+    constructor(source, name, type, attribute, amount = 0, duration = 0) {
+        const effectTypes = ["immediate", "temporary", "continuous"];
+        try {
+            if (typeof name !== "string" ||
+                typeof type !== "string" ||
+                typeof attribute !== "string") {
+                throw TypeError("Effect name, type or attribute not string");
+            }
+            else if (effectTypes.indexOf(type) === -1) {
+                throw Error("Effect type not listed in 'effectTypes' array!");
+            }
+            else if (typeof amount !== "number" || typeof duration !== "number") {
+                throw TypeError("Effect number or duration not a number!");
+            }
+        } catch (e) {
+            console.error(e);
+        };
+        this.source = source;
+        this.name = name;
+        this.type = type;
+        this.attribute = attribute;
+        this.amount = amount;
+        this.duration = duration;
+        this.description = `${this.name} modifies ${this.attribute} by ${this.amount} for ${this.duration}`;
+    }
+};
+
+class Buff {
+    constructor(effect) {
+        const now = new Date();
+        this.name = effect.name;
+        this.attribute = effect.attribute;
+        this.amount = effect.amount;
+        this.duration = effect.duration;
+        
+        if (effect.type === "temporary") {
+            this.end = now + (effect.duration * 60 * 1000);
+        };
+    }
+};
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+class InventorySlot {
+    constructor(slot) {
+        this.id = slot.id;
+        this.numberItems = slot.numberItems;
+        this.item = slot.item;
+    }
+    show() {
+        this.numberItems ? 
+        `Inventory slot ${this.id} has ${this.numberItems} of item "${this.item.name}"` : 
+        `Inventory slot ${this.id} is empty`;
+    }
+	
+	// Returns space left in slot
+	checkSpace(id, num) {
+		// If slot is empty return smallest of: item's max stack or number of items
+		if (this.numberItems === 0) {
+			return items[id].maxStack < num ? items[id].maxStack : num;
+		}
+		// If slot has stuff in already
+		else if (this.numberItems > 0) {
+			// If id of item in slot matches passed item id
+			if (id === this.item.id) {
+				// Return number of spaces left or 0 if full
+				return this.numberItems < this.item.maxStack ? this.item.maxStack - this.numberItems : 0;
+			}
+			// If slot's item is different from passed item
+			else {return 0}
+		}
+	}
+	add(id, num) {
+		if (this.numberItems === 0) {
+			this.item = items[id];
+			if (num > items[id].maxStack) {
+				this.numberItems = items[id].maxStack;
+				return num - items[id].maxStack;
+			}
+			else {
+				this.numberItems = num;
+				return 0;
+			console.log("Success at adding an item to inventory slot!");
+			}
+		}
+		else {			
+			// If this slot has different item
+			if (id !== this.item.id) {
+				return num
+			}
+			// If this slot has the right kind of item
+			else {
+				const numItemsFit = this.item.maxStack - this.numberItems;
+				
+				if (num > numItemsFit) {
+					this.numberItems += numItemsFit;
+					return num - numItemsFit;
+				}
+				else {
+					this.numberItems += num;
+					console.log("Success at adding some more items to inventory slot!");
+					return 0;
+				}
+			}
+		}
+	}
+	
+	empty() {
+		this.numberItems = 0;
+		this.item = {};
+	}
+	// Consume one item
+	remove = (how) => {
+		try {
+			if (this.numberItems === 0) {
+				throw Error("Can't remove anything from an empty inventory slot!");
+			} else {
+				this.numberItems -= 1;
+				if (how === "consume") {
+					// Check for item effects and apply any found
+					if (this.item.effects.length > 0) {
+						this.item.effects.forEach(effect => player.addEffect(effect1));
+						if (this.numberItems === 0) {
+							this.item = {};
+						}
+					} else {
+						// Item not consumed (probably trashed)
+						return;
+					}
+				}
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	}
+	show() {
+		return this.numberItems === 0 ? `Inventory slot ${this.id} is empty` : `Inventory slot ${this.id} has ${this.numberItems} of item ${this.item.name}`;
+	}
+};
+
+class Inventory {
+    constructor(slots = []) {
+		this.slots = [];
+		//console.log(slots);
+		if (slots.length === 0) {
+			//console.log('hasta la bista');
+			for (let i = 0; i < 5 ; i++) {
+				slots[i] = {
+					id : 0,
+					numberItems : 0,
+					item : {}
+				}
+			}
+		}
+		slots.forEach(slot => {
+			this.slots.push(new InventorySlot(slot))
+		});
+		
+    }
+    addSlots(num) {
+        for (let i = 0; i < num; i++) {
+            this.slots.push(new InventorySlot(this.slots.length));
+        };
+    }
+	// Check if inventory has room for items, return success or failure
+	addItems(id, num) {
+		console.log(`trying to add ${num} of ${items[id].name}`);
+		let spaceFor = 0;
+		let enoughSpace = false;
+		// Loop through inventory slots checking for enough space for these items
+		for (let i = 0; i < this.slots.length; i++) {
+			spaceFor += this.slots[i].checkSpace(id, num);
+			if (spaceFor >= num) {
+				enoughSpace = true;
+				break;
+			};
+		}
+		// Add items to suitable inventory slots
+		if (enoughSpace) {
+			for (let i = 0; i < this.slots.length; i++) {
+				num = this.slots[i].add(id, num);
+				if (num <= 0) {
+					return true;
+				}
+			}
+		}
+		// Not enough room inventory
+		else {
+			return false;
+		}
+	}
+	show = () => {
+		let text = 'Inventory show func:\n';
+		this.slots.forEach(slot => {
+			text += slot.show() + '\n'}
+		);
+		return text;
+	}
+	reset = () => {
+		this.slots.forEach(slot => slot.empty());
+	}
+	
+};
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+class Quest {
+	constructor(id, title = "", description = "", stages = [], totalLength = 0, levelMin = 0, levelMax = 0,	canRepeat = true, 
+		rewards = {}, needsQuest = [], time = 0, timerStart = 0, timeLeft = 0, activeStage = 0) {
+			this.id = id;
+			this.title = title;
+			this.description = description;
+			this.totalLength = totalLength;
+			this.stages = stages;
+            this.stages.forEach(stage => {stage.end = stage.end * 60000})
+			this.levelMin = levelMin;
+			this.levelMax = levelMax;
+            // Turning minutes into milliseconds
+			this.time = time * 60000;
+			//this.timerStart = timerStart;
+			//this.timeLeft = timeLeft;
+			this.activeStage = activeStage;
+			this.canRepeat = canRepeat;
+			this.rewards = rewards;
+			this.needsQuest = needsQuest;
+    }
+    updateStage(stage = this.activeStage) {
+        const listHTML = `
+            <li id="previous-stage-item">${char.name} was ${this.stages[stage].text.toLowerCase()}</li>
+            `;
+        this.activeStage += 1;
+        document.getElementById('previous-stages-list').insertAdjacentHTML('afterbegin', listHTML);
+    }
+
+    checkEligible() {
+        let eligible = true;
+
+        if (this.canRepeat === false) {
+            if (char.questsDone[this.id] >= 1) {
+                eligible = false;
+            };
+        };
+
+        // Loop through list of prerequisite quests
+        this.needsQuest.forEach(req => {
+            const needed = quests[findQuestIndex[req.id]];
+            if (char.questsDone[needed.id] < req.minimum || char.questsDone[needed.id] === undefined) {
+                //console.log(`Quest ${this.title} needs quest ${needed.title} before doing this one!`);
+                eligible = false;
+            }
+            else {
+                //console.log('done that prerequisite quest!');
+            }
+        });
+        
+        // Simple comparison checks
+        if (player.level < this.levelMin ||
+            player.level > this.levelMax
+        ) {eligible = false}
+        return eligible;
+    }
+};
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+class Person {
+	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}) {
+		this.name = name;
+		this.place = place;
+		this.level = level;
+		this.xp = xp;
+		this.xpRequired = xpRequired;
+        this.xpModifier = xpModifier;
+		this.coins = coins;
+		this.hp = hp;
+		this.hpMax = hpMax;
+		this.jobs = jobs;
+		this.effects = effects;
+
+		this.attributeFunctions = {
+			hp : this.changeHp,
+			hpMax : this.changeHpMax
+		}
+		
+		//console.log("person constructor, inventory: ", inventory);
+		//console.log("inventory : ", inventory instanceof Inventory);
+		console.log(inventory.slots);
+		//if (inventory.slots === []) {
+			//this.inventory = new Inventory(
+		this.inventory = new Inventory(inventory.slots);
+		//console.log("this.inventory : ", this.inventory instanceof Inventory);
+	}
+	
+	addEffect(effect) {
+		//console.log(`attribute: ${effect.attribute}`);
+		if (Object.keys(this.attributeFunctions).indexOf(effect.attribute) !== -1) {
+			this.attributeFunctions[effect.attribute](effect.amount);
+			
+		} else { 
+			this[effect.attribute] += effect.amount;
+		}
+	}
+	changeHp = num => {
+		this.hp += num;
+		console.log('is this thing on?');
+		console.log(this);
+		if (this.hp <= 0) {
+			this.hp = 0;
+			console.log("you died aaargh");
+		} else if (this.hp > this.hpMax) {
+			this.hp = this.hpMax
+		}
+	}
+	changeHpMax = (num) => {
+		this.hpMax += num;
+		if (this.hp > this.hpMax) {
+			this.hp = this.hpMax;
+		}
+	}
+	
+	
+	/*
+	addBuff(effect) {
+        this.effects.push(new Buff(effect));
+    };
+	removeBuff(effect) {
+		}
+	}
+	*/	
+};
+
+class Player extends Person {
+    constructor(name = "Anon", place = "Balham", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, 
+		hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}, lastLogin = {}, loginStreak = 0, questJobs = [], currentActivity = {}) {
+        super(name, place, level, xp, xpRequired, xpModifier, coins, hp, hpMax, jobs, effects, inventory);
+        this.questJobs = questJobs;
+        this.currentActivity = currentActivity;
+        this.lastLogin = lastLogin;
+        this.loginStreak = loginStreak;
+    }
+};
+
+class Char extends Person {
+	constructor(name = "", place = "", level = 0, xp = 0, xpRequired = 100, xpModifier = 1, coins = 0, 
+		hp = 100, hpMax = 100, jobs = [], effects = [], inventory = {}, role = "", currentQuest = {}, questsDone = []) {
+
+		name = name === "" ? characterNames[Math.floor(Math.random() * characterNames.length)] : name;
+		place = place === "" ? placeNames[Math.floor(Math.random() * placeNames.length)] : place
+
+		super(name, place, level, xp, xpRequired, xpModifier, coins, hp, hpMax, jobs, effects, inventory);
+		this.role = "Scoundrel";
+		this.currentQuest = currentQuest;
+		this.questsDone = questsDone;
+	}
+};
+
+
+/***********************************************************************************************************/
+/***********************************************************************************************************/
+/***********************************************************************************************************/
+/**********************************                                       **********************************/
 /**********************************                 SETUP                 **********************************/
 /**********************************                                       **********************************/
 /***********************************************************************************************************/
@@ -46,6 +508,8 @@ const questStatus = document.getElementById('quest-status');
 const playerMessageText = document.getElementById('player-messages');
 const charMessageText = document.getElementById('char-messages');
 
+
+
 let playerMessage = [];
 let charMessage = [];
 
@@ -55,309 +519,150 @@ let game = {
     availableQuests: [],
 };
 
-function definePlayer() {
-    return {
-        name : "Anon",
-        place: "Balham",
-        level : 1,
-        xp : 0,
-        xpRequired: 100,
-        coins: 0,
-        hp: 100,
-        hpMax: 100,
-        jobs : [],
-        questJobs : [],
-        // Player doesn't do quests, character does; can delete.
-        // Unless implementing player quests later on...
-        questsDone: {},
-        currentActivity : {},
-        status: "resting",
-        lastLogin: "",
-        loginStreak: 1,
-    };
-};
-//const player = definePlayer();
 
-function defineChar() {
-    const name = characterNames[Math.floor(Math.random() * characterNames.length)];
-    const place = placeNames[Math.floor(Math.random() * placeNames.length)];
-    
-    return {
-        name: name,
-        place: place,
-        role: "Scoundrel",
-        level: 1,
-        xp: 0,
-        xpRequired: 100,
-        coins: 0,
-        hp: 100,
-        hpMax: 100,
-        currentQuest: {},
-        questsDone: {},
-        jobs: [],
-        status: "resting",
-    };
-};
-
-//let charJob = "";
-//let charJobs = [];
 
 const quests = [
-    {
-        id: 0,
-        title: "Kill rats",
-        description: "There are some rats in the field we're trying to farm. If you kill them, we can get back to work. Please help!",
-        totalLength: 20,
-        stages: [
-            {
-                text: "Travelling to the field",
-                end: 5,
-            },
-            {
-                text: "Fighting the rats",
-                end: 12,
-            },
-            {
-                text: "Harvesting the bodies",
-                end: 15,
-            },
-            {
-                text: "Travelling back to village",
-                end: 20,
-            },
-        ],
-        levelMin: 0,
-        levelMax: 10,
-        coinReward: 10,
-        xpReward: 80,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: true,
-        results: [],
-        needsQuest: [
-            {id:2, minimum:1},
-        ],
-    },
-    {
-        id: 1,
-        title: "Search for scraps",
-        description: "If you keep your eyes peeled, you're bound to find something useful, edible, or sellable.",
-        totalLength: 10,
-        stages: [
-            {
-                text: "Peering into nooks and crannies",
-                end: 8,
-            },
-            {
-                text: "Poring over the various scraps they found",
-                end: 10,
-            },
-        ],
-        levelMin: 0,
-        levelMax: 10,
-        coinReward: 15,
-        xpReward: 40,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: true,
-        results: [],
-        needsQuest: [],
-    },
-    {
-        id: 2,
-        title: "Test",
-        description: "2 stages, both 3 seconds; quest length 6 seconds ",
-        totalLength: .1,
-        stages: [
-            {
-                text: "Stage 0",
-                end: .05,
-            },
-            {
-                text: "Stage 1",
-                end: .1,
-            },
-        ],
-        levelMin: 0,
-        levelMax: 20,
-        coinReward: 15,
-        xpReward: 40,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: true,
-        results: [],
-        needsQuest: [],
-    },
-    {
-        id: 3,
-        title: "Looking for a job (Storyline quest)",
-        description: "Hopefully you can find someone to teach you a useful trade",
-        totalLength: 25,
-        stages: [
-            {
-                text: "Loitering around various shops",
-                end: 5,
-            },
-            {
-                text: "Getting chased away from various shops",
-                end: 7,
-            },
-            {
-                text: "Following the blacksmith around on her errands",
-                end: 18,
-            },
-            {
-                text: "Getting threatened by the blacksmith",
-                end: 20,
-            },
-            {
-                text: "Sneaking around behind the blacksmith's shop",
-                end: 25,
-            },
-            
-        ],
-        levelMin: 2,
-        levelMax: 20,
-        coinReward: 0,
-        xpReward: 80,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: false,
-        results: [],
-        needsQuest: [],
-    },
-    {
-        id: 4,
-        title: "Finding a job (Storyline quest)",
-        description: "The blacksmith finds you loitering behind her shop! You're in trouble now...",
-        totalLength: 25,
-        stages: [
-            {
-                text: "Getting caught by the blacksmith",
-                end: 2,
-            },
-            {
-                text: "Getting hauled through the streets by the ear",
-                end: 6,
-            },
-            {
-                text: "Being confirmed as a good-for-nothing layabout by people in the town square",
-                end: 10,
-            },
-            {
-                text: "Getting taken back and into the blacksmith's lair :O",
-                end: 14,
-            },
-            {
-                text: "Being forced to make your mark on a crude apprentice's contract. 'I need an apprentice. You'll do', she says.",
-                end: 16,
-            },
-            {
-                text: "Being scrubbed clean by the blacksmith",
-                end: 21,
-            },
-            {
-                text: "Being fed and watered by the blacksmith, who gruffly introduces herself: 'Amice'. ",
-                end: 25,
-            },
-            
-        ],
-        levelMin: 2,
-        levelMax: 20,
-        coinReward: 0,
-        xpReward: 80,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: false,
-        results: [
-            {
+	new Quest(0, "Kill rats", "There are some rats in the field we're trying to farm. If you kill them, we can get back to work. Please help!",
+		// Quest stages
+		[
+			{text: "Travelling to the field", end: 5},
+			{text: "Fighting the rats", end: 12},
+			{text: "Harvesting the bodies", end: 15},
+			{text: "Travelling back to village", end: 20},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		20, 0, 10, true,
+		// Rewards
+		{
+			xp : 80,
+			coins : 10,
+			items : [],
+			results : [],
+		}, 
+		// needsQuest
+		[{id:2, minimum:1}, ],
+    ),
+	new Quest(1, "Search for scraps", "If you keep your eyes peeled, you're bound to find something useful, edible, or sellable.",
+		// Quest stages
+		[
+			{text: "Peering into nooks and crannies", end: 8},
+			{text: "Poring over the various scraps they found", end: 10},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		10, 0, 10, true,
+		// Rewards
+		{
+			xp : 40,
+			coins : 15,
+		}
+	),
+	new Quest(2, "Test", "2 stages, both 3 seconds; quest length 6 seconds",
+		// Quest stages
+		[
+			{text: "Stage 0", end: 0.05},
+			{text: "Stage 1", end: 0.1},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		0.1, 0, 20, true,
+		// Rewards
+		{
+			xp : 0,
+			coins : 0,
+			items : [
+			{id : 0, number : 2,}
+			],
+		},
+		
+    ),
+	new Quest(3, "Looking for a job (Storyline quest)", "Hopefully you can find someone to teach you a useful trade",
+		// Quest stages
+		[
+			{text: "Loitering around various shops", end: 5},
+			{text: "Getting chased away from various shops", end: 7},
+			{text: "Following the blacksmith around on her errands", end: 18},
+			{text: "Getting threatened by the blacksmith", end: 20},
+			{text: "Sneaking around behind the blacksmith's shop", end: 25},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		25, 2, 20, false,
+		// Rewards
+		{
+			xp : 80,
+			coins : 0,
+			items : [],
+			results : [],
+		},
+    ),
+	new Quest(4, "Finding a job (Storyline quest)", "The blacksmith finds you loitering behind her shop! You're in trouble now...",
+		// Quest stages
+		[
+			{text: "Getting caught by the blacksmith", end: 2},
+			{text: "Getting hauled through the streets by the ear", end: 6},
+			{text: "Being confirmed as a good-for-nothing layabout by people in the town square", end: 10},
+			{text: "Getting taken back and into the blacksmith's lair :O", end: 14},
+			{text: "Being forced to make your mark on a crude apprentice's contract. 'I need an apprentice. You'll do', she says.", end: 16},
+			{text: "Being scrubbed clean by the blacksmith", end: 21},
+			{text: "Being fed and watered by the blacksmith, who gruffly introduces herself: 'Amice'.", end: 25},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		25, 2, 20, false,
+		// Rewards
+		{
+			xp : 80,
+			coins : 0,
+			items : [],
+			results : [{
 				name: "Become blacksmith",
 				message: "You are now a blacksmith's apprentice!",
 				key: "role",
 				change: "Blacksmith's apprentice",
-			},
-        ],
-        needsQuest: [
-            {id: 3, minimum: 1}
-        ],
-    },
-    {
-        id: 5,
-        title: "Work them bellows kid (Trade quest)",
-        description: "Now you're an apprentice, you're still miserable, but at least you know how miserable you'll be for at least the next year.",
-        totalLength: 20,
-        stages: [
-            {
-                text: "Getting shouted at. The blacksmith yells 'bellows!'. Almost bellows the word, you could say.",
-                end: 2,
-            },
-            {
-                text: "Hauling on the bellows, never quite managing the precision Amice demands.",
-                end: 18,
-            },
-            {
-                text: "Gasping for breath and breathing furnace-hot air. Amice says 'go' and you flop limply out the room for a jug of ale, knowing you'll hear the call again in a matter of minutes.",
-                end: 20,
-            },
-        ],
-        levelMin: 2,
-        levelMax: 20,
-        coinReward: 0,
-        xpReward: 60,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: true,
-        results: [],
-        needsQuest: [
-            {id: 4, minimum: 1}
-        ],
-    },
-    {
-        id: 6,
-        title: "Fetch coke (Trade quest)",
-        description: "Amice knits her eyebrows at you as you half collapse in the baking forge room. She drags you to the fuel store, and making sure you're wathing, scoops five scoops of coke into a sack and returns to the forge.",
-        totalLength: 5,
-        stages: [
-            {
-                text: "Taking a sack to the coke store.",
-                end: 1,
-            },
-            {
-                text: "Piling five scoops of coke into the sack and dragging it to the forge.",
-                end: 4,
-            },
-            {
-                text: "Getting yelled at for bringing the wrong amount of fuel, in the wrong way, in the wrong time (too slow, of course, never fast enough).",
-                end: 5,
-            },
-        ],
-        levelMin: 3,
-        levelMax: 20,
-        coinReward: 0,
-        xpReward: 20,
-        time: 0,
-        timerStart: 0,
-        timeLeft: 0,
-        activeStage: 0,
-        canRepeat: true,
-        results: [],
-        needsQuest: [
-            {id: 5, minimum: 10}
-        ],
-    },
-];
+			},],
+		}, 
+		// needsQuest
+		[{id:3, minimum:1}, ],
+	),
+    new Quest(5, "Work them bellows kid (Trade quest)", "Now you're an apprentice, you're still miserable, but at least you know how miserable you'll be for at least the next year.",
+		// Quest stages
+		[
+			{text: "Getting shouted at. The blacksmith yells 'bellows!'. Almost bellows the word, you could say.", end: 2},
+			{text: "Hauling on the bellows, never quite managing the precision Amice demands.", end: 18},
+			{text: "Gasping for breath and breathing furnace-hot air. Amice says 'go' and you flop limply out the room for a jug of ale, knowing you'll hear the call again in a matter of minutes.", end: 20},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		20, 2, 20, true,
+		// Rewards
+		{
+			xp : 60,
+			coins : 0,
+			items : [],
+			results : [],
+		}, 
+		// needsQuest
+		[{id:4, minimum:1}, ],
+		
+    ),
+	new Quest(6, "Fetch coke (Trade quest)", "Amice knits her eyebrows at you as you half collapse in the baking forge room. She drags you to the fuel store, and making sure you're wathing, scoops five scoops of coke into a sack and returns to the forge.",
+		// Quest stages
+		[
+			{text: "Taking a sack to the coke store.", end: 1},
+			{text: "Piling five scoops of coke into the sack and dragging it to the forge.", end: 5},
+			{text: "Getting yelled at for bringing the wrong amount of fuel, in the wrong way, in the wrong time (too slow, of course, never fast enough).", end: 5},
+		],
+		// totalLength, levelMin, levelMax, canRepeat
+		5, 3, 20, true,
+		// Rewards
+		{
+			xp : 20,
+			coins : 0,
+			items : [],
+			results : [],
+		}, 
+		// needsQuest
+		[{id:5, minimum:10}, ],
+    ),
+];	
+
+
 
 // Create object of keys (quest id) and values ('quests' index)
 function getQuestIndexArray() {
@@ -428,12 +733,17 @@ function charactersSetup() {
     updateMessage("char", "I'm glad you're here.");
     
 	// Fetch player from local storage
-	playerRetreival = JSON.parse(localStorage.getItem("player"));
+	const playerRetreival = JSON.parse(localStorage.getItem("player"));
     if (playerRetreival !== null) {
         player = playerRetreival;
-    }
+		// Create Player object with localstorage data
+		player = new Player(player.name, player.place, player.level, player.xp, player.xpRequired, player.xpModifier,
+			player.coins, player.hp, player.hpMax, player.jobs, player.effects, player.inventory,
+			player.lastLogin, player.loginStreak, player.questJobs, player.currentActivity);
+		}
     else {
-        player = definePlayer();
+        // Player hasn't got anything in localstorage
+        player = new Player();
     }
 	
 	// Converting player's last login into Date object
@@ -442,12 +752,15 @@ function charactersSetup() {
 	// Fetch character from localstorage
     charRetreival = JSON.parse(localStorage.getItem("char"));
     if (charRetreival !== null) {
-        char = charRetreival;
+         char = charRetreival;
+		// Create Char object with localstorage data
+		char = new Char(char.name, char.place, char.level, char.xp, char.xpRequired,  char.xpModifier,
+			char.coins, char.hp, char.hpMax, char.jobs, char.effects, char.inventory,
+			char.role, char.currentQuest, char.questsDone);
     }
     else {
-        char = defineChar();
+         char = new Char();
     }
-	
 	// If current quest is empty, clear the player attributes in case saved in localstorage
 	if (char.currentQuest.id === undefined) {
 		player.questJobs = [];
@@ -464,7 +777,44 @@ function charactersSetup() {
     return {player, char};
 };
 
+
 const {player, char} = charactersSetup();
+const effect1 = new Effect("My brain", "restore health", "immediate", "hp", -5)
+const items = [
+    new Item(0, "apple", "Just an apple, really", 5, "/img/apple-icon.svg", [effect1]),
+    new Item(1, "stick", "Only a stick, chico", 10, "/img/stick-icon.svg"),
+];
+
+// Initialize timers
+const countdownTimer = new Timer('countdownTimer', false);
+const countUpTimer = new Timer('countUpTimer');
+
+// Testing inventory adding
+
+console.log(player.inventory.show());
+console.log(char.inventory.show());
+//player.inventory.addItems(0, 3);
+//player.inventory.reset();
+//console.log(player.inventory.show());
+//console.log(player.inventory.slots[0].show());
+
+
+// Testing effect adding (direct)
+
+//player.effects = [];
+//player.hp = 100;
+//console.log(`Player hp: ${player.hp}`);
+//player.addEffect(effect1);
+
+//console.log(player.inventory.slots[0].show());
+//player.inventory.slots[0].remove("consume");
+//console.log(`Player hp: ${player.hp}`);
+//console.log(player.inventory.slots[0].show());
+
+
+
+
+update();
 const findQuestIndex = getQuestIndexArray();
 
 // Login streak checker 
@@ -541,6 +891,7 @@ function checkLoginStreak() {
 };
 
 updateMessage("player", checkLoginStreak());
+
 update();
 listQuests();
 
@@ -594,16 +945,16 @@ function updateJobs() {
             </div>`
         });
     };
-    allPlayer.innerHTML = playerHTML;
+    // allPlayer.innerHTML = playerHTML;
 
     let charHTML = ``
     if (char.jobs.length > 0) {
         char.jobs.forEach(job => {
-            charHTML += `<div class="info">${char.name} completed "${job.title}" in ${Math.ceil(job.time/60000)} minutes, and gained ${job.xpReward} XP!
+            charHTML += `<div class="info">${char.name} completed "${job.title}" in ${Math.ceil(job.time/60000)} minutes, and gained ${job.rewards.xp} XP!
             </div>`
         });
     };
-    allCharacter.innerHTML = charHTML;
+    // allCharacter.innerHTML = charHTML;
 };
 
 function updateLocalStorage() {
@@ -671,47 +1022,7 @@ function updateMessage(charOrPlayer = "", string = "") {
 };
 
 
-/***********************************************************************************************************/
-/***********************************************************************************************************/
-/***********************************************************************************************************/
-/**********************************                                       **********************************/
-/**********************************             TIMER FUNCTIONS           **********************************/
-/**********************************                                       **********************************/
-/***********************************************************************************************************/
-/***********************************************************************************************************/
-/***********************************************************************************************************/
 
-
-function timerStart() {
-    game.activityState = "active";
-    player.currentActivity.timerStart = Date.now();
-    game.questState = "active";
-    char.currentQuest.timerStart = Date.now();
-    statusUpdate();
-};
-
-function setQuestTimeLeft() {
-    char.currentQuest.timeLeft = (char.currentQuest.totalLength * 60000) - char.currentQuest.time;
-};
-
-function updateQuestTimeLeft() {
-    if (char.currentQuest.timeLeft > 0) {
-        setQuestTimeLeft();
-        if (char.currentQuest.timeLeft <= 0) {
-            char.currentQuest.timeLeft = 0;
-        }
-    }
-};
-
-function timerStop() {
-    game.activityState = "paused";
-    game.questState = "paused";
-    const now = Date.now();
-    player.currentActivity.time += now - player.currentActivity.timerStart;
-    char.currentQuest.time += now - char.currentQuest.timerStart;
-    updateQuestTimeLeft();
-    statusUpdate();
-};
 
 
 /***********************************************************************************************************/
@@ -728,7 +1039,7 @@ function timerStop() {
 function editActivity() {
     game.activityState = "editing";
 	if (game.questState === "finished") {
-		console.log("should show previous activities now");
+		// console.log("should show previous activities now");
 	}
     let taskEntryHTML = `
         <div id="task-entry" class="task-entry">
@@ -742,7 +1053,7 @@ function editActivity() {
     if (player.currentActivity.name) {
         document.getElementById('task-name').innerText = player.currentActivity.name;
     };
-    activityButtons.innerHTML = `<button type="button" id="task-submit" class="task-entry">Enter activity</button>`;
+    activityButtons.innerHTML = `<button type="button" id="task-submit" class="btn btn-info task-entry">Enter activity</button>`;
     document.getElementById('task-submit').addEventListener("click", prepActivity);
     statusUpdate();
 };
@@ -766,17 +1077,16 @@ function prepActivity() {
             id : Date.now(),
             name : taskName.value,
             time : 0,
-            timerStart: 0,
+            // timerStart: 0,
         };
         document.getElementById('task').innerHTML = `
                 <div id="task-messages">
                     <div class="current-task-msg">You are doing this: <span id="current-task" class="current-task">${taskName.value}</span></div>
-                    <div class="current-task-msg">You have been working for <span id="current-time" class="current-time">0</span> minutes</div>
                 </div>
         `;
         activityButtons.innerHTML = `
-            <button id="edit-activity-btn">Edit activity</button>
-            <button id="start-activity-btn" >Start activity</button>
+            <button id="edit-activity-btn" class="btn btn-info">Edit activity</button>
+            <button id="start-activity-btn" class="btn btn-info">Start activity</button>
         `;
         // If quest is finished or not selected, player can't start activity
         if (game.questState != "paused" && game.questState != "ready") {
@@ -808,17 +1118,18 @@ function startActivity() {
     else if (game.questState === "ready" || game.questState === "paused") {
         //if (game.questState === "ready") {
             activityButtons.innerHTML = `
-                <button id="pause-activity-btn">Pause</button>
-                <button id="resume-activity-btn" disabled="true">Resume</button>
-                <button id="finish-activity-btn">Finish and submit</button>
+                <button id="pause-activity-btn" class="btn btn-info">Pause</button>
+                <button id="resume-activity-btn"  class="btn btn-info" disabled="true">Resume</button>
+                <button id="finish-activity-btn" class="btn btn-info">Finish and submit</button>
             `;
             document.getElementById('finish-activity-btn').addEventListener("click", submitActivity);
             document.getElementById('pause-activity-btn').addEventListener("click", pauseActivity);
             document.getElementById('resume-activity-btn').addEventListener("click", resumeActivity);
         //}
-        timerStart();
-		// Why is this here? Surely it should only be in 'submitQuest' func...
-        //player.questJobs.unshift(player.currentActivity);
+        //timerStart();
+		
+        countUpTimer.start(countUpTimer.time);
+        countdownTimer.start(countdownTimer.time);
         
     }
 };
@@ -826,29 +1137,35 @@ function startActivity() {
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-function updateTime() {
+/* function updateTime() {
     document.getElementById('current-time').innerText = Math.floor(player.currentActivity.time/60000);
 
     if (char.currentQuest.timeLeft == 0) {
         document.getElementById('quest-time-left').innerText = 0;    
     }
     document.getElementById('quest-time-left').innerText = Math.ceil(char.currentQuest.timeLeft/60000);
-};
+}; */
 
 function pauseActivity() {
     const pauseButton = document.getElementById('pause-activity-btn');
     pauseButton.setAttribute("disabled", true);
     
-    timerStop();
-    updateTime();
-    updateQuestStage();
+    //timerStop();
+
+    // Methods of new Timer class 
+    countUpTimer.stop();
+    countdownTimer.stop();
+
+
+    //updateTime();
+    //updateQuestStage();
     // Leave running for testing
     console.log("Quest time: ", char.currentQuest.time/60000);
 
     if (char.currentQuest.timeLeft <= 0) {
-        console.log('runs?');
-        questFinished();
-        document.getElementById('resume-activity-btn').setAttribute("disabled", true);
+        // Not sure this is necessary now
+        
+        
     }
     else {
         document.getElementById('resume-activity-btn').removeAttribute("disabled");
@@ -856,7 +1173,11 @@ function pauseActivity() {
 };
 
 function resumeActivity () {
-    timerStart();
+    //timerStart();
+
+    countUpTimer.start(countUpTimer.time);
+    countdownTimer.start(countdownTimer.time); 
+
     document.getElementById('resume-activity-btn').setAttribute("disabled", true);
     document.getElementById('pause-activity-btn').removeAttribute("disabled");
 };
@@ -876,9 +1197,14 @@ function submitActivity() {
     }
     updateMessage("player", "You completed an activity: congratulations!");
     
+    // Adding new timer functionality
+    player.currentActivity.time = countUpTimer.time;
+
+
 	// Add player current activity to list of quest activities
     player.questJobs.unshift(player.currentActivity);
 
+    
     
 	// If this is first activity submitted during quest , show the list of previous activities
 	if (player.questJobs.length === 1) {
@@ -893,6 +1219,7 @@ function submitActivity() {
 	updateMessage("char", "I wish I could continue this quest...");
 
     player.currentActivity = {};
+    countUpTimer.reset();
 	
     // Change activity screen to new activity entry
 	editActivity();
@@ -912,92 +1239,20 @@ function submitActivity() {
 /*          **********  *******     *************************************************************************/
 
 
-// List of tests for eligible quests
-function checkQuestEligible(quest) {
-    let eligible = true;
-    console.log('Quest: ', quest.title);
-    //console.log('questsDone: ', char.questsDone);
-    // Check if quest is repeatable and if so if character has already done it
-    if (quest.canRepeat === false) {
-        if (char.questsDone[quest.id] >= 1) {
-            eligible = false;
-        };
-    };
-    
-    // Loop through list of prerequisite quests
-    // Quests that SHOULD be ineligible are getting through this section somehow..
-    console.log('needsQuest: ', quest.needsQuest);
-    console.log('char questsDone: ', char.questsDone);
-    quest.needsQuest.forEach(req => {
-        const needed = quests[findQuestIndex[req.id]];
-        console.log('quest needed title/id: ', needed.id,needed.title);
-        console.log(char.questsDone[needed.id]);
-        
-        if (char.questsDone[needed.id] < req.minimum || char.questsDone[needed.id] === undefined) {
-            console.log(`Quest ${quest.title} needs quest ${needed.title} before doing this one!`);
-            eligible = false;
-        }
-        else {
-            console.log('done that prerequisite quest!');
-        }
-    });
-    
-    // Simple comparison checks
-    if (player.level < quest.levelMin ||
-        player.level > quest.levelMax
-    ) {eligible = false}
-    return eligible;
-};
-
-function updateQuestStage() {
-    const q = char.currentQuest;
-    //console.log(q.activeStage, q.stages[q.activeStage])
-    // Check current quest stage isn't the last one
-    if (q.activeStage < q.stages.length - 1) {
-        // Check if time is over next stage's start time
-        if (q.time/60000 > q.stages[q.activeStage].end) {
-            if (q.activeStage === 0) {
-                const stagesHTML = `
-                <div id="previous-stages" class="previous-stages-header">
-                <h4>Previous quest stages</h4>
-                </div>
-                <ul id="previous-stages-list" class="previous-stages-list">
-
-                </ul>
-                `;
-                questContent.insertAdjacentHTML('beforeend', stagesHTML);
-            }
-            // Loop through stages adding to screen list and updating until correct stage reached
-            while (q.time/60000 > q.stages[q.activeStage].end && q.activeStage < q.stages.length - 1) {
-                const listHTML = `
-                <li id="previous-stage-item">${char.name} was ${q.stages[q.activeStage].text.toLowerCase()}</li>
-                `;
-                q.activeStage += 1;
-                document.getElementById('previous-stages-list').insertAdjacentHTML('afterbegin', listHTML);
-            }
-            document.getElementById('quest-stage-text').innerText = q.stages[q.activeStage].text.toLowerCase();
-        }
-    }
-};
-
-/*************************************************************************************************/
-/*************************************************************************************************/
 
 // Reset various things ready for a new quest
 function resetQuest() {
 	// This makes use of mutation
-    char.currentQuest.time = 0;
-    char.currentQuest.timerStart = 0;
+    
     char.currentQuest.activeStage = 0;
-    char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
+    //char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
     char.currentQuest = {};
 	questJobsList.innerHTML = "";
 }
 
 function listQuests() {
     // Testing for new quest requirements
-	//console.log('char quests: ', char.questsDone[2]>3);
-	console.log('How many time does this run?')
+	
     // This should run every time except the first time through
 	if (game.questState === "finished") {
         resetQuest();
@@ -1019,6 +1274,7 @@ function listQuests() {
 		statusUpdate();
     };
     document.getElementById('finished-jobs').setAttribute('hidden', true);
+    document.getElementById("previous-stages").setAttribute("hidden", true);
     
     // Now starts the code to list quests...
     questContent.innerHTML = `
@@ -1027,10 +1283,10 @@ function listQuests() {
                 <div id="quest-list">
     `;
     quests.forEach(quest => {
-        if (checkQuestEligible(quest)) {
+        if (quest.checkEligible()) {
             document.getElementById('quest-list').insertAdjacentHTML('afterbegin', `
                 <div class="quest-item">
-                    <div ><button id="quest-${quest.id}"> ${quest.title}: ${quest.totalLength} minutes</button></div>
+                    <div ><button id="quest-${quest.id}"  class="btn btn-info"> ${quest.title}: ${quest.totalLength} minutes</button></div>
                     <div class="quest-description">${quest.description}</div>
                 </div>
             `);
@@ -1038,31 +1294,32 @@ function listQuests() {
             document.getElementById(`quest-${quest.id}`).addEventListener("click", () => {
                 game.questState = "ready";
                 char.currentQuest = quest;
-                // Set quest time remaining in milliseconds
-				// Function currently empty!
-                setQuestTimeLeft();
-                console.log('quest stage text: ', char.currentQuest.stages[0].text)
+                
+                countdownTimer.reset();
+                countdownTimer.countdownFrom = quest.totalLength * 60 * 1000;
+                countdownTimer.time = countdownTimer.countdownFrom;
+                
                 questContent.innerHTML = `
                     <div class="quest-title">Title: ${char.currentQuest.title}</div>
-                    <div>Time left: <span id="quest-time-left">${char.currentQuest.totalLength}</span> minutes</div>
                     <div class="quest-stage">${char.name} is <span id="quest-stage-text">${char.currentQuest.stages[0].text.toLowerCase()}</span></div>
                 `;
+                
+                document.getElementById("previous-stages").removeAttribute("hidden");
+                
                 if (game.activityState === "paused") {
                     document.getElementById('resume-activity-btn').removeAttribute("disabled");
-                }
-                else if (game.activityState === "none") {
+                } else if (game.activityState === "none") {
                     updateMessage("player", "Now add an activity and you're good to go!");
-                }
-                else if (game.activityState === "ready") {
+                } else if (game.activityState === "ready") {
                     updateMessage("player", "Hit start to get going!");
                     document.getElementById('start-activity-btn').removeAttribute("disabled");
                 } 
-				//console.log("start quest: current quest obj: ", char.currentQuest);
+				
                 statusUpdate();
             });
         }
         else {
-            console.log(`listQuests: ${quest.title} didn't make it`);
+           // console.log(`listQuests: ${quest.title} didn't make it`);
         }
     });
     questContent.insertAdjacentHTML('beforeend', `
@@ -1083,12 +1340,15 @@ function listQuests() {
 // Basically updates quest state and adds 'show rewards' button
 function questFinished() {
     game.questState = "finished";
+    // Put text from final stage onto screen list
+    char.currentQuest.updateStage(char.currentQuest.stages.length - 1);
+    document.getElementById('quest-stage-text').innerText = "finished";
     statusUpdate();
         
     // Update Quest box
     questFinishedArea.removeAttribute('hidden');
     document.getElementById('finished-btn-container').innerHTML = `
-                <button id="rewards-btn">Show rewards</button>
+                <button id="rewards-btn" class="btn btn-info">Show rewards</button>
         `;
     document.getElementById('rewards-btn').addEventListener("click", showRewards);
 
@@ -1100,13 +1360,13 @@ function questFinished() {
 
 function showRewards() {
     // Calculate player and character rewards
-    player.xp += char.currentQuest.xpReward;
-    char.xp += char.currentQuest.xpReward;
-    player.coins += char.currentQuest.coinReward;
-    char.coins += char.currentQuest.coinReward;
+    player.xp += char.currentQuest.rewards.xp;
+    char.xp += char.currentQuest.rewards.xp;
+    player.coins += char.currentQuest.rewards.coins;
+    char.coins += char.currentQuest.rewards.coins;
 
     function levelUpCheck(object) {
-        let = xpRequired = object.level * 100;
+        let xpRequired = object.level * 100;
         if (object.xp > xpRequired) {
             while(object.xp>xpRequired) {
                 object.level += 1;
@@ -1128,28 +1388,42 @@ function showRewards() {
     }
     // Player and character xp, coins etc in top bar
     updateInfoText();
-
+	
+	
     let rewardHTML = `
         <div class="reward-text">
-            ${char.name} finished the quest! You both get ${char.currentQuest.xpReward}xp and ${char.currentQuest.coinReward} coins.
+            ${char.name} finished the quest! You both get ${char.currentQuest.rewards.xp}xp and ${char.currentQuest.rewards.coins} coins.
         </div>`;
 
+	// Add items
+	let itemsHTML = "";
+	 if (char.currentQuest.rewards.items !== undefined) {
+		 char.currentQuest.rewards.items.forEach(item => {
+			let inventorySuccess = char.inventory.addItems(item.id, item.number);
+			itemsHTML = inventorySuccess ? `${char.name} got ${item.number} more of ${items[item.id].name}` : `Inventory doesn't have room for any more ${items[item.id].name}!`;
+		});
+	 }
+	 
+	console.log(char.currentQuest.rewards);
+	
     // Make change for each quest result
-    let resultHTML = ``;
-	char.currentQuest.results.forEach(result => {
-		resultHTML += `<div class="result-item">${result.message}</div>`;
-		char[result.key] = result.change;
-	});
-    if (resultHTML != ``) {
-        resultHTML = `<div class="result-text">${resultHTML}</div>`
-    };
-    document.getElementById('quest-results').innerHTML = rewardHTML + resultHTML;
+	let resultHTML = "";
+	if (char.currentQuest.rewards.results !== undefined) {
+		char.currentQuest.rewards.results.forEach(result => {
+			resultHTML += `<div class="result-item">${result.message}</div>`;
+			char[result.key] = result.change;
+		});
+		resultHTML = `<div class="result-text">${resultHTML}</div>`
+	}
+    
+    
+    
+    document.getElementById('quest-results').innerHTML = rewardHTML + itemsHTML + resultHTML;
     document.getElementById('finished-btn-container').innerHTML = `
-        <button id="show-quests-btn">Show quests</button>
+        <button id="show-quests-btn"  class="btn btn-info">Show quests</button>
     `;
     document.getElementById('show-quests-btn').addEventListener("click", listQuests);
     
-
     // If player clicks 'show rewards' without submitting paused activity:
 	if (game.activityState === "paused") {
         //console.log('really runs?');
