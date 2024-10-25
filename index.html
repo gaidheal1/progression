@@ -10,32 +10,24 @@
     </head>
     <body>
         <nav>
-            <!-- <div class="navbar">
-                <span class="nav-title"><h1>Progression</h1></span>
-                <span class="nav-links">
-                    <ul class="nav-links-list">
-                        
-                        <li><a href="https://gaidheal1.github.io" target="_blank">Blog</a></li>
-                    </ul>
-                </span>
-            </div> -->
+            
 			<div class="navbar">
 				<div class="left-links">
-				  <div class="button-comp">
-					<div class="button-style-comp"><button class="button">Progress RPG</button></div>
-				  </div>
-				  <div class="link"><div class="text-wrapper">Stats</div></div>
-				  <div class="link"><div class="text-wrapper">Manage</div></div>
-				  <div class="link"><div class="text-wrapper">Achievements</div></div>
-				  <div class="link"><div class="text-wrapper">Link 1</div></div>
+				  <!-- <div class="button-comp"> -->
+					<div class="button-style-comp"><button class="impact nav-text">Progress RPG</button></div>
+				  <!-- </div> -->
+				  <div class="link"><div class="nav-text"><a href="https://gaidheal1.github.io" target="_blank">Blog</a></div></div>
+				  <!-- <div class="link"><div class="text-wrapper">Manage</div></div>
+				  <div class="link"><div class="text-wrapper">Achievements</div></div> -->
+				  
 				</div>
 				<div class="right-links">
-				  <div class="div-wrapper"><div class="div">Log out</div></div>
+				  <div class="link"><div class="text-wrapper"><a href="">Log out</a></div></div>
 				  <div class="account">
-					<div class="button-comp">
+					<!-- <div class="button-comp"> -->
 					  <!-- <img class="arrow-icon" src="img/arrow-icon.svg" /> -->
-					  <div class="button-style-comp"><button class="button">Account</button></div>
-					</div>
+					  <div class="button-style-comp"><button class="impact nav-text">Account</button></div>
+					<!-- </div> -->
 				  </div>
 				</div>
 			  </div>
@@ -45,14 +37,32 @@
 				<div class="desktop-info-comp">
 					<div class="single-info-comp">
 						<div class="top-bar">
+
 							<div class="info-left">
-								<span class="name" id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span>
-								<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="btn btn-info">Edit</button></span>
-								<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
+								<div class="profile-pic"></div>
+								<div class="info-left-text">
+									<div class="name-frame">
+										<span class="name"><span id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span></span>
+										<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="light">Edit</button></span>
+									</div>
+										
+									<div class="level-info">
+										<span class="level">Level <span id="player-level">1</span>; <span class="xp">XP: <span id="player-xp">0/100</span></span>
+									</div>
+								</div>
 							</div>
+
 							<div class="info-right">
-								<span class="coins"><span id="player-coins">0</span> coins; </span><span class="hp">HP: <span id="player-hp"></span></span>
+								<div class="info-right-text">
+									<div class="health-info">
+										<span class="hp">HP: <span id="player-hp"></span></span>
+									</div>
+									<div class="currency-info">
+										<span class="coins"><span id="player-coins">0</span> gems </span>
+									</div>
+								</div>
 							</div>
+
 						</div>
 					</div>
 			
@@ -80,13 +90,34 @@
 			
 					<div class="single-info-comp">
 						<div class="top-bar">
+							
 							<div class="info-left">
-								<span id="char-name" class="name">Arthur</span> of <span id="char-place" class="place">Lancelot</span> is a <span id="char-role" class="role">scoundrel</span>
-								<span class="level">Level <span id="char-level">1</span>; <span class="xp">XP: <span id="char-xp">0/100</span></span>
-							</div>
+								<div class="info-left-text">
+									<div class="health-info">
+										<span class="hp">HP: <span id="char-hp"></span></span>
+									</div>
+									<div class="currency-info">
+										<span class="coins"><span id="char-coins">0</span> coins</span>
+									</div>
+								</div>
+							</div>							
+
 							<div class="info-right">
-								<span class="coins"><span id="char-coins">0</span> coins; </span><span class="hp">HP: <span id="char-hp"></span></span>
+								<div class="info-right-text">
+									<div class="name-frame">
+										<span class="name"><span id="char-name">Anon</span> of <span class="place" id="char-place">Balham</span> is a <span class="role" id="char-role">scoundrel</span></span>
+									</div>
+										
+									<div class="level-info">
+										
+											<span class="level">Level <span id="char-level">1</span>;</span> <span class="xp">XP: <span id="char-xp">0/100</span></span>
+										
+									</div>
+								</div>
+								<div class="profile-pic"></div>
+
 							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -99,7 +130,7 @@
 
 							<div id="status-line">
 								<div class="status-container">
-									<span id="activity-status" class="status">Activity running</span>
+									<span id="activity-status" class="status">Activity waiting</span>
 								</div>
 							</div>
 							
@@ -113,7 +144,7 @@
 								<textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" maxlength="80" minlength="4"></textarea>
 							</div>
 							<div id="activity-btns">
-								<button type="button" id="task-submit" class="btn btn-info task-entry">Enter activity</button>
+								<button type="button" id="task-submit" class="impact">Enter activity</button>
 							</div>
 
 						</div>
@@ -136,7 +167,7 @@
 							
 							<div id="status-line">
 								<div class="status-container">
-									<span id="quest-status" class="status">Quest running</span>
+									<span id="quest-status" class="status">Quest not selected</span>
 								</div>
 							</div>
 
@@ -177,8 +208,8 @@
 				<div class="workspace" id="game-messages">
 
 					<div class="workspace-content">
-						<h3 class="text-center">Player Messages</h3>
 						<div class="task-display">
+							<h3 class="text-center">Player Messages</h3>
 							<ul id="player-messages">
 								<span>No messages yet!</span>
 							</ul>
@@ -187,7 +218,7 @@
 						
 					<div class="workspace-content">
 						<div class="task-display">
-						<h3 class="text-center">Character Messages</h3>
+							<h3 class="text-center">Character Messages</h3>
 							<ul id="char-messages">
 								<span>No messages yet!</span>
 							</ul>
@@ -303,17 +334,17 @@
 			<div class="app-info">
 				<div class="footer-section">
 				  <div class="heading"><div class="text-wrapper-6">Heading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
 				</div>
 				<div class="footer-section">
 				  <div class="heading"><div class="text-wrapper-6">Heading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
-				  <div class="subheading"><div class="text-wrapper-4">Subheading</div></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
+				  <div class="subheading"><a href="">Subheading</a></div>
 				</div>
 			</div>
 		</footer>

@@ -21,11 +21,11 @@ class Timer {
     }
     start(duration) {
         if (this.isRunning) return;
-        if (!this.countUp) console.log("hi")
+        //if (!this.countUp) console.log("hi");
         this.isRunning = true;
         this.startTime = Date.now();
         this.time = duration;
-        console.log("countup: ", this.countUp, ", this.time: ", this.time);
+        //console.log("countup: ", this.countUp, ", this.time: ", this.time);
     
         game.activityState = "active";
         game.questState = "active";
@@ -36,7 +36,7 @@ class Timer {
             const time = this.countUp ? this.time + elapsedTime : this.time - elapsedTime;
             this.display(time);
             
-            console.log("time: ", time);
+            //console.log("time: ", time);
             if (!this.countUp) {
                 if (this.countdownFrom - this.time > char.currentQuest.stages[char.currentQuest.activeStage].end) {
                     char.currentQuest.updateStage();
@@ -57,7 +57,7 @@ class Timer {
 
         clearInterval(this.intervalId);
         this.isRunning = false;
-        console.log("countup: ", this.countUp, ", this.time: ", this.time);
+        //console.log("countup: ", this.countUp, ", this.time: ", this.time);
         this.time = this.countUp ? Date.now() - this.startTime : this.time - (Date.now() - this.startTime);
 
         game.activityState = "paused";
@@ -183,7 +183,7 @@ class InventorySlot {
 			else {
 				this.numberItems = num;
 				return 0;
-			console.log("Success at adding an item to inventory slot!");
+			//console.log("Success at adding an item to inventory slot!");
 			}
 		}
 		else {			
@@ -201,7 +201,7 @@ class InventorySlot {
 				}
 				else {
 					this.numberItems += num;
-					console.log("Success at adding some more items to inventory slot!");
+					//console.log("Success at adding some more items to inventory slot!");
 					return 0;
 				}
 			}
@@ -267,7 +267,7 @@ class Inventory {
     }
 	// Check if inventory has room for items, return success or failure
 	addItems(id, num) {
-		console.log(`trying to add ${num} of ${items[id].name}`);
+		//console.log(`trying to add ${num} of ${items[id].name}`);
 		let spaceFor = 0;
 		let enoughSpace = false;
 		// Loop through inventory slots checking for enough space for these items
@@ -389,7 +389,7 @@ class Person {
 		
 		//console.log("person constructor, inventory: ", inventory);
 		//console.log("inventory : ", inventory instanceof Inventory);
-		console.log(inventory.slots);
+		//console.log(inventory.slots);
 		//if (inventory.slots === []) {
 			//this.inventory = new Inventory(
 		this.inventory = new Inventory(inventory.slots);
@@ -407,8 +407,8 @@ class Person {
 	}
 	changeHp = num => {
 		this.hp += num;
-		console.log('is this thing on?');
-		console.log(this);
+		//console.log('is this thing on?');
+		//console.log(this);
 		if (this.hp <= 0) {
 			this.hp = 0;
 			console.log("you died aaargh");
@@ -791,8 +791,8 @@ const countUpTimer = new Timer('countUpTimer');
 
 // Testing inventory adding
 
-console.log(player.inventory.show());
-console.log(char.inventory.show());
+//console.log(player.inventory.show());
+//console.log(char.inventory.show());
 //player.inventory.addItems(0, 3);
 //player.inventory.reset();
 //console.log(player.inventory.show());
@@ -844,7 +844,7 @@ function checkLoginStreak() {
 		if (diffMs < fourDaysMs) {			
 			if (dateDiff === 0) {
 				// First streak check: already logged in today?
-				playerMessage = "Welcome back! You last logged in earlier today.";
+				playerMessage = `Welcome back! You last logged in earlier today. You have logged in ${player.loginStreak} days in a row.`;
 			}
 			else {
 				//console.log("Checking whether we go back into previous month");
@@ -973,7 +973,7 @@ function updateInfoText() {
     charNameText.innerText = char.name;
     charPlaceText.innerText = char.place;
     charRoleText.innerText = char.role.toLowerCase();
-    charLevelText.innerText = `${char.level}; `
+    charLevelText.innerText = char.level;
     charXpText.innerText = `${char.xp}/${char.xpRequired}`;
     charCoinsText.innerText = char.coins;
     charHpText.innerText = `${char.hp}/${char.hpMax}`;
@@ -1053,7 +1053,7 @@ function editActivity() {
     if (player.currentActivity.name) {
         document.getElementById('task-name').innerText = player.currentActivity.name;
     };
-    activityButtons.innerHTML = `<button type="button" id="task-submit" class="btn btn-info task-entry">Enter activity</button>`;
+    activityButtons.innerHTML = `<button type="button" id="task-submit" class="impact">Enter activity</button>`;
     document.getElementById('task-submit').addEventListener("click", prepActivity);
     statusUpdate();
 };
@@ -1085,8 +1085,8 @@ function prepActivity() {
                 </div>
         `;
         activityButtons.innerHTML = `
-            <button id="edit-activity-btn" class="btn btn-info">Edit activity</button>
-            <button id="start-activity-btn" class="btn btn-info">Start activity</button>
+            <button id="edit-activity-btn" class="light">Edit activity</button>
+            <button id="start-activity-btn" class="impact">Start activity</button>
         `;
         // If quest is finished or not selected, player can't start activity
         if (game.questState != "paused" && game.questState != "ready") {
@@ -1118,9 +1118,9 @@ function startActivity() {
     else if (game.questState === "ready" || game.questState === "paused") {
         //if (game.questState === "ready") {
             activityButtons.innerHTML = `
-                <button id="pause-activity-btn" class="btn btn-info">Pause</button>
-                <button id="resume-activity-btn"  class="btn btn-info" disabled="true">Resume</button>
-                <button id="finish-activity-btn" class="btn btn-info">Finish and submit</button>
+                <button id="pause-activity-btn" class="light">Pause</button>
+                <button id="resume-activity-btn"  class="light" disabled="true">Resume</button>
+                <button id="finish-activity-btn" class="impact">Finish and submit</button>
             `;
             document.getElementById('finish-activity-btn').addEventListener("click", submitActivity);
             document.getElementById('pause-activity-btn').addEventListener("click", pauseActivity);
@@ -1286,7 +1286,7 @@ function listQuests() {
         if (quest.checkEligible()) {
             document.getElementById('quest-list').insertAdjacentHTML('afterbegin', `
                 <div class="quest-item">
-                    <div ><button id="quest-${quest.id}"  class="btn btn-info"> ${quest.title}: ${quest.totalLength} minutes</button></div>
+                    <div ><button id="quest-${quest.id}"  class="light"> ${quest.title}: ${quest.totalLength} minutes</button></div>
                     <div class="quest-description">${quest.description}</div>
                 </div>
             `);
@@ -1348,7 +1348,7 @@ function questFinished() {
     // Update Quest box
     questFinishedArea.removeAttribute('hidden');
     document.getElementById('finished-btn-container').innerHTML = `
-                <button id="rewards-btn" class="btn btn-info">Show rewards</button>
+                <button id="rewards-btn" class="impact">Show rewards</button>
         `;
     document.getElementById('rewards-btn').addEventListener("click", showRewards);
 
@@ -1404,7 +1404,7 @@ function showRewards() {
 		});
 	 }
 	 
-	console.log(char.currentQuest.rewards);
+	// console.log(char.currentQuest.rewards);
 	
     // Make change for each quest result
 	let resultHTML = "";
@@ -1420,7 +1420,7 @@ function showRewards() {
     
     document.getElementById('quest-results').innerHTML = rewardHTML + itemsHTML + resultHTML;
     document.getElementById('finished-btn-container').innerHTML = `
-        <button id="show-quests-btn"  class="btn btn-info">Show quests</button>
+        <button id="show-quests-btn"  class="impact">Show quests</button>
     `;
     document.getElementById('show-quests-btn').addEventListener("click", listQuests);
     
