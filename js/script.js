@@ -1368,13 +1368,14 @@ function questFinished() {
     document.getElementById('quest-stage-text').innerText = "finished";
     statusUpdate();
         
-    // Update Quest box
     questFinishedArea.removeAttribute('hidden');
     document.getElementById('finished-btn-container').innerHTML = `
                 <button id="rewards-btn" class="impact">Show rewards</button>
         `;
     document.getElementById('rewards-btn').addEventListener("click", showRewards);
-
+    
+    document.getElementById('quest-results').innerHTML = ''; 
+    
     update();
 };
 
