@@ -42,8 +42,8 @@
 								<div class="profile-pic"></div>
 								<div class="info-left-text">
 									<div class="name-frame">
-										<span class="name"><span id="player-name">Anon</span> of <span class="place" id="player-place">Balham</span></span>
-										<span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="light">Edit</button></span>
+										<span class="name"><input type="text" id="player-name" placeholder="Anon" size="12" /> of <input type="text" class="place" id="player-place" placeholder="Balham" size="10 "/></span>
+										<!-- <span id="player-details-confirm"><label for="edit-btn"><button type="button" id="edit-btn" class="light">Edit</button></span> -->
 									</div>
 										
 									<div class="level-info">
@@ -140,21 +140,21 @@
 							
 							
 							<div id="task" class="task-entry-container">
-								<label for="task-name" id="task-entry-label" class="tex-entry">What are you going to work on?</label>    
+								<label for="task-name" id="task-entry-label" class="text-entry">What are you going to work on?</label>    
 								<textarea placeholder="eg washing the dishes" required id="task-name" name="task-entry" cols="30" rows="2" maxlength="80" minlength="4"></textarea>
 							</div>
 							<div id="activity-btns">
-								<button type="button" id="task-submit" class="impact">Enter activity</button>
+								<button type="button" id="task-submit"  class="impact">Enter activity</button>
 							</div>
 
 						</div>
 						<div class="list-frame">
 
-							<div id="finished-jobs" hidden="true">
+							<div id="finished-jobs">
 								<div id="previous-activities" class="header">
-									<h3>Previous activities</h3>
+									<h3>Today's activities</h3>
 								</div>
-								<ul id="quest-jobs-list" class="quest-jobs-list">
+								<ul id="activities-today" class="quest-jobs-list">
 
 								</ul>
 							</div>

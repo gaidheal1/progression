@@ -10,12 +10,12 @@
 
 
 class Timer {
-    constructor(elementId, countUp = true, countdownFrom = 0) {
+    constructor(elementId, countUp = true, countUpFrom = 0, countdownFrom = 0) {
       this.element = document.getElementById(elementId);
       this.countUp = countUp;
       this.countdownFrom = countdownFrom;
       this.intervalId = null;
-      this.time = countUp ? 0 : countdownFrom;
+      this.time = countUp ? countUpFrom : countdownFrom;
       this.startTime = 0;
       this.isRunning = false;
     }
@@ -80,6 +80,7 @@ class Timer {
         if (days > 0) displayString += `${days}d `;
         if (hours > 0 || days > 0) displayString += `${hours.toString().padStart(2, '0')}:`;
         displayString += `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
 
         this.element.textContent = displayString;
     }
@@ -473,13 +474,19 @@ class Char extends Person {
 
 const taskArea = document.getElementById('task');
 const activityButtons = document.getElementById('activity-btns');
-const questJobsList = document.getElementById('quest-jobs-list');
+const activitiesToday = document.getElementById('activities-today');
 
-const editPlayerButton = document.getElementById('edit-btn');
+// const editPlayerButton = document.getElementById('edit-btn');
 const startButton = document.getElementById('task-submit');
 
 const playerNameText = document.getElementById('player-name');
 const playerPlaceText = document.getElementById('player-place');
+playerNameText.addEventListener('input', () => {
+    updateLocalStorage();
+  });
+playerPlaceText.addEventListener('input', () => {
+    updateLocalStorage();
+  });
 const playerXpText = document.getElementById('player-xp');
 const playerLevelText = document.getElementById('player-level');
 const playerCoinsText = document.getElementById('player-coins');
@@ -749,6 +756,13 @@ function charactersSetup() {
 	// Converting player's last login into Date object
 	player.lastLogin = new Date(player.lastLogin);
 
+    // Converting player's job list ids into date objects
+    player.jobs.forEach(job => {job.id = new Date(job.id)});
+    
+    // Retreiving current activity
+    //player.currentActivity.time = 5500;
+    console.log(player.currentActivity);
+
 	// Fetch character from localstorage
     charRetreival = JSON.parse(localStorage.getItem("char"));
     if (charRetreival !== null) {
@@ -761,18 +775,14 @@ function charactersSetup() {
     else {
          char = new Char();
     }
-	// If current quest is empty, clear the player attributes in case saved in localstorage
-	if (char.currentQuest.id === undefined) {
-		player.questJobs = [];
-		player.currentActivity = {};
-	};
+	
 	// In case localstorage data exists from previous version
 	if (char.role === undefined) {
 		char.role = "Scoundrel";
 	};
 	if (player.lastLogin === undefined) {
 		player.lastLogin = new Date();
-		player.lastLogin = 1;
+		player.loginStreak = 1;
 	}
     return {player, char};
 };
@@ -785,10 +795,21 @@ const items = [
     new Item(1, "stick", "Only a stick, chico", 10, "/img/stick-icon.svg"),
 ];
 
+updateJobs();
+
 // Initialize timers
 const countdownTimer = new Timer('countdownTimer', false);
 const countUpTimer = new Timer('countUpTimer');
-
+if (player.currentActivity.name) {
+    countUpTimer.time = player.currentActivity.time;
+    document.getElementById('task-name').innerText = player.currentActivity.name;
+    countUpTimer.display(countUpTimer.time);
+    prepActivity();
+}
+if (char.currentQuest.title) {
+    console.log('say hi');
+    startQuest(char.currentQuest)
+}
 // Testing inventory adding
 
 //console.log(player.inventory.show());
@@ -835,7 +856,7 @@ function checkLoginStreak() {
 
 		const diffMs = now - player.lastLogin;
 		const fourDaysMs = 1000 * 60 * 60 * 24 * 4;
-		const nowDate = now.getDate();
+		let nowDate = now.getDate();
 		
 		const lastLoginDate = player.lastLogin.getDate();
 		
@@ -906,6 +927,8 @@ listQuests();
 /***********************************************************************************************************/
 
 
+
+
 function statusUpdate() {
     function makeStatusText(status) {
         let statusText = "";
@@ -938,33 +961,52 @@ function statusUpdate() {
 };
 
 function updateJobs() {
-    let playerHTML = ``;
+    const now = new Date;
+    
+    let playerHTML = "";
     if (player.jobs.length > 0) {
-        player.jobs.forEach(job => {
-            playerHTML += `<div class="info">You did "${job.name}" for ${Math.ceil(job.time/60000)} minutes
-            </div>`
+        const todayActivities = player.jobs.filter(job => {
+            //console.log(job.id);
+            console.log(typeof(now), typeof(job.id));
+            //console.log(now.toDateString(), job.id.toDateString());
+            return job.id.toDateString() === now.toDateString();
+        });
+
+        todayActivities.forEach(job => {
+            playerHTML += `
+                <li class="activity-today">${job.name} for ${Math.ceil(job.time/60000)} minutes</li>
+            `;
         });
     };
+    //console.log(playerHTML);
+    activitiesToday.innerHTML = playerHTML;
     // allPlayer.innerHTML = playerHTML;
 
-    let charHTML = ``
-    if (char.jobs.length > 0) {
-        char.jobs.forEach(job => {
-            charHTML += `<div class="info">${char.name} completed "${job.title}" in ${Math.ceil(job.time/60000)} minutes, and gained ${job.rewards.xp} XP!
-            </div>`
-        });
-    };
+    // let charHTML = ``
+    // if (char.jobs.length > 0) {
+    //     char.jobs.forEach(job => {
+    //         charHTML += `<div class="info">${char.name} completed "${job.title}" in ${Math.ceil(job.time/60000)} minutes, and gained ${job.rewards.xp} XP!
+    //         </div>`
+    //     });
+    // };
     // allCharacter.innerHTML = charHTML;
 };
 
+
+
 function updateLocalStorage() {
+    // player.jobs.forEach(job => {
+        
+    //     job.id = job.id.toUTCString();
+    // });
+
     localStorage.setItem("player", JSON.stringify(player));
     localStorage.setItem("char", JSON.stringify(char));
 };
 
 function updateInfoText() {
-    playerNameText.innerText = player.name;
-    playerPlaceText.innerText = player.place;
+    playerNameText.value = player.name;
+    playerPlaceText.value = player.place;
     playerLevelText.innerText = player.level;
     playerXpText.innerText = `${player.xp}/${player.xpRequired}`;
     playerCoinsText.innerText = player.coins;
@@ -986,7 +1028,7 @@ function clearInput() {
 */
 
 function update() {
-    updateJobs();
+    
     updateLocalStorage();
     updateInfoText();
     //clearInput();
@@ -1050,9 +1092,6 @@ function editActivity() {
         </div>
     `;
     document.getElementById('task').innerHTML = taskEntryHTML;
-    if (player.currentActivity.name) {
-        document.getElementById('task-name').innerText = player.currentActivity.name;
-    };
     activityButtons.innerHTML = `<button type="button" id="task-submit" class="impact">Enter activity</button>`;
     document.getElementById('task-submit').addEventListener("click", prepActivity);
     statusUpdate();
@@ -1071,17 +1110,24 @@ function prepActivity() {
         updateMessage("player", "Please enter a task name more than 4 and fewer than 100 characters!");
         return;
     }
-    else {    
-        // create job objects
-        player.currentActivity = {
-            id : Date.now(),
-            name : taskName.value,
-            time : 0,
-            // timerStart: 0,
-        };
+    else {
+        if (player.currentActivity.name) {
+            countUpTimer.display(player.currentActivity.time);
+        }
+        else {
+            // create job objects
+            player.currentActivity = {
+                id : new Date,
+                name : taskName.value,
+                time : 0,
+                // timerStart: 0,
+            };
+            console.log(player.currentActivity.id);
+        }
+        
         document.getElementById('task').innerHTML = `
                 <div id="task-messages">
-                    <div class="current-task-msg">You are doing this: <span id="current-task" class="current-task">${taskName.value}</span></div>
+                    <div class="current-task-msg">You are doing this: <span id="current-task" class="current-task">${player.currentActivity.name}</span></div>
                 </div>
         `;
         activityButtons.innerHTML = `
@@ -1156,6 +1202,8 @@ function pauseActivity() {
     countUpTimer.stop();
     countdownTimer.stop();
 
+    player.currentActivity.time = countUpTimer.time;
+    char.currentQuest.time = countdownTimer.time;
 
     //updateTime();
     //updateQuestStage();
@@ -1170,6 +1218,7 @@ function pauseActivity() {
     else {
         document.getElementById('resume-activity-btn').removeAttribute("disabled");
     }
+    update();
 };
 
 function resumeActivity () {
@@ -1185,11 +1234,6 @@ function resumeActivity () {
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-// Add current player activity to questJobs array, update previous activities list on screen
-function updateQuestJobs() {
-    
-};
-
 // 
 function submitActivity() {
     if (game.activityState != "paused") {
@@ -1198,23 +1242,12 @@ function submitActivity() {
     updateMessage("player", "You completed an activity: congratulations!");
     
     // Adding new timer functionality
-    player.currentActivity.time = countUpTimer.time;
+    player.currentActivity.time = countUpTimer.time - player.currentActivity.time;
 
-
-	// Add player current activity to list of quest activities
-    player.questJobs.unshift(player.currentActivity);
-
+    // Add player current activity to full jobs list
+    player.jobs.push(player.currentActivity);
     
-    
-	// If this is first activity submitted during quest , show the list of previous activities
-	if (player.questJobs.length === 1) {
-		document.getElementById('finished-jobs').removeAttribute('hidden');
-	}
-	// Add list item to page
-	questJobsList.insertAdjacentHTML('afterbegin', `
-		<li class="quest-job">${player.currentActivity.name} for ${Math.ceil(player.currentActivity.time/60000)} minutes</li>
-	`);
-	// Quest not over, choose another activity		
+    // Quest not over, choose another activity		
 	updateMessage("player", 'Enter another activity to continue the quest.');
 	updateMessage("char", "I wish I could continue this quest...");
 
@@ -1223,7 +1256,7 @@ function submitActivity() {
 	
     // Change activity screen to new activity entry
 	editActivity();
-	
+	updateJobs();
     update();
 };
 
@@ -1247,7 +1280,34 @@ function resetQuest() {
     char.currentQuest.activeStage = 0;
     //char.currentQuest.timeLeft = char.currentQuest.totalLength * 60000;
     char.currentQuest = {};
-	questJobsList.innerHTML = "";
+}
+
+function startQuest(quest) {
+    game.questState = "ready";
+    char.currentQuest = quest;
+    
+    //countdownTimer.reset();
+
+    countdownTimer.countdownFrom = quest.totalLength * 60 * 1000;
+    countdownTimer.time = countdownTimer.countdownFrom - char.currentQuest.time;
+    
+    questContent.innerHTML = `
+        <div class="quest-title">Title: ${char.currentQuest.title}</div>
+        <div class="quest-stage">${char.name} is <span id="quest-stage-text">${char.currentQuest.stages[0].text.toLowerCase()}</span></div>
+    `;
+    
+    document.getElementById("previous-stages").removeAttribute("hidden");
+    
+    if (game.activityState === "paused") {
+        document.getElementById('resume-activity-btn').removeAttribute("disabled");
+    } else if (game.activityState === "none") {
+        updateMessage("player", "Now add an activity and you're good to go!");
+    } else if (game.activityState === "ready") {
+        updateMessage("player", "Hit start to get going!");
+        document.getElementById('start-activity-btn').removeAttribute("disabled");
+    } 
+    
+    statusUpdate();
 }
 
 function listQuests() {
@@ -1256,24 +1316,12 @@ function listQuests() {
     // This should run every time except the first time through
 	if (game.questState === "finished") {
         resetQuest();
-		if (player.questJobs.length === 0) {
-            player.jobs.push(player.currentActivity);
-            player.currentActivity.time = 0;
-            player.currentActivity.timerStart = 0;
-        }
-        else {
-            player.currentActivity = {};
-        }
-		// Add items from questJobs to allJobs in the right order
-		let newArray = [];
-		player.questJobs.forEach(element => {newArray.unshift(element)});
-		Array.prototype.push.apply(player.jobs, newArray);
-		player.questJobs = [];
-		questFinishedArea.setAttribute("hidden", true);
+		
+        questFinishedArea.setAttribute("hidden", true);
 		game.questState ="none";
 		statusUpdate();
     };
-    document.getElementById('finished-jobs').setAttribute('hidden', true);
+    
     document.getElementById("previous-stages").setAttribute("hidden", true);
     
     // Now starts the code to list quests...
@@ -1291,32 +1339,7 @@ function listQuests() {
                 </div>
             `);
 			// event listener adds 'start quest' function, basically
-            document.getElementById(`quest-${quest.id}`).addEventListener("click", () => {
-                game.questState = "ready";
-                char.currentQuest = quest;
-                
-                countdownTimer.reset();
-                countdownTimer.countdownFrom = quest.totalLength * 60 * 1000;
-                countdownTimer.time = countdownTimer.countdownFrom;
-                
-                questContent.innerHTML = `
-                    <div class="quest-title">Title: ${char.currentQuest.title}</div>
-                    <div class="quest-stage">${char.name} is <span id="quest-stage-text">${char.currentQuest.stages[0].text.toLowerCase()}</span></div>
-                `;
-                
-                document.getElementById("previous-stages").removeAttribute("hidden");
-                
-                if (game.activityState === "paused") {
-                    document.getElementById('resume-activity-btn').removeAttribute("disabled");
-                } else if (game.activityState === "none") {
-                    updateMessage("player", "Now add an activity and you're good to go!");
-                } else if (game.activityState === "ready") {
-                    updateMessage("player", "Hit start to get going!");
-                    document.getElementById('start-activity-btn').removeAttribute("disabled");
-                } 
-				
-                statusUpdate();
-            });
+            document.getElementById(`quest-${quest.id}`).addEventListener("click", () => startQuest(quest));
         }
         else {
            // console.log(`listQuests: ${quest.title} didn't make it`);
@@ -1388,8 +1411,7 @@ function showRewards() {
     }
     // Player and character xp, coins etc in top bar
     updateInfoText();
-	
-	
+		
     let rewardHTML = `
         <div class="reward-text">
             ${char.name} finished the quest! You both get ${char.currentQuest.rewards.xp}xp and ${char.currentQuest.rewards.coins} coins.
@@ -1416,21 +1438,14 @@ function showRewards() {
 		resultHTML = `<div class="result-text">${resultHTML}</div>`
 	}
     
-    
-    
+        
     document.getElementById('quest-results').innerHTML = rewardHTML + itemsHTML + resultHTML;
     document.getElementById('finished-btn-container').innerHTML = `
         <button id="show-quests-btn"  class="impact">Show quests</button>
     `;
     document.getElementById('show-quests-btn').addEventListener("click", listQuests);
     
-    // If player clicks 'show rewards' without submitting paused activity:
-	if (game.activityState === "paused") {
-        //console.log('really runs?');
-		// Add player actvitiy to questJobs; clear current activity
-        submitActivity();
-        //console.log(player.questJobs);    
-	};
+    
     char.jobs.unshift(char.currentQuest);
 
     // Add (or increment) record of this quest completion
@@ -1456,7 +1471,7 @@ function showRewards() {
 /***********************************************************************************************************/
 
 
-function editPlayer() {
+/* function editPlayer() {
     if (editPlayerButton.innerText == "Edit") {
         if (player.activityState === "active") {
             updateMessage("player", "You're already working on a task: come back when you've finished :)");
@@ -1489,11 +1504,11 @@ function editPlayer() {
             updateLocalStorage();
           }
     }
-};
+}; */
 
 startButton.addEventListener("click", prepActivity);
 
-editPlayerButton.addEventListener("click", editPlayer);
+//editPlayerButton.addEventListener("click", editPlayer);
 
 
 /**********************************************************************************/
