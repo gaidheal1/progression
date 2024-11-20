@@ -748,7 +748,7 @@ function startActivity() {
             activityButtons.innerHTML = `
                 <button id="pause-activity-btn">Pause</button>
                 <button id="resume-activity-btn" disabled="true">Resume</button>
-                <button id="finish-activity-btn">Finish and submit</button>
+                <button id="finish-activity-btn">Finish and Submit</button>
             `;
             document.getElementById('finish-activity-btn').addEventListener("click", submitActivity);
             document.getElementById('pause-activity-btn').addEventListener("click", pauseActivity);
@@ -1023,13 +1023,14 @@ function questFinished() {
     game.questState = "finished";
     statusUpdate();
         
-    // Update Quest box
     questFinishedArea.removeAttribute('hidden');
     document.getElementById('finished-btn-container').innerHTML = `
-                <button id="rewards-btn">Show rewards</button>
-        `;
+        <button id="rewards-btn">Show rewards</button>
+    `;
     document.getElementById('rewards-btn').addEventListener("click", showRewards);
-
+    
+    document.getElementById('quest-results').innerHTML = ''; 
+    
     update();
 };
 
